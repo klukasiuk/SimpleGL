@@ -160,7 +160,7 @@ void initGL(int w , int h)
 	glMatrixMode(GL_MODELVIEW);                                                 // Macierz modelowania = jednsotkowa
 	glLoadIdentity();	
 
-	glClearColor(1,1,1,0);                                            	        // Kolor czyszczenia ekranu
+	glClearColor(0,0,0,0);                                            	        // Kolor czyszczenia ekranu
 
 	glClear( GL_COLOR_BUFFER_BIT );                                             // Czyszczê wstêpnie ekran
 
