@@ -1,4 +1,7 @@
 # SimpleGL
 Simple Graphics Library 
 
-This lib is based on OpenGL and GLFW
+Based on : OpenGL -> rendering
+           GLFW   -> window
+           FTGL   -> font rendering
+           SOIL   -> image loading
