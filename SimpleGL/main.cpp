@@ -23,5 +23,5 @@ int main()
 
   wait();
 
-//  end();
+  end();
 }

@@ -109,7 +109,7 @@ void errorCritical(char * msg)
 void atEnd()
 {
 	if( released == false )
-	error(" Nie zwolniono pamiêci ");
+	error(" Nie zwolniono pamiêci . Upewnij siê ¿e u¿ywasz funkcji end() do zakoñczenie programu .");
 }
 
 
