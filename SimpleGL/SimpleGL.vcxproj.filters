@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Libs">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="SimpleGL">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Libs\GLFW">
+      <UniqueIdentifier>{4aaeb86a-675c-4849-889c-5945cb808c2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libs\FTGL">
+      <UniqueIdentifier>{4d2140fa-9aab-404e-a514-f2cb942ad2f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libs\SOIL">
+      <UniqueIdentifier>{0b029367-9219-4bd5-a342-2450a6768881}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleGL.cpp">
+      <Filter>SimpleGL</Filter>
+    </ClCompile>
+    <ClCompile Include="msgbox.cpp">
+      <Filter>SimpleGL</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SimpleGL.h">
+      <Filter>SimpleGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\GLFW\Include\glfw3.h">
+      <Filter>Libs\GLFW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\FTGL\Include\FTGL\ftgl.h">
+      <Filter>Libs\FTGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\SOIL\include\SOIL.h">
+      <Filter>Libs\SOIL</Filter>
+    </ClInclude>
+    <ClInclude Include="msgbox.h">
+      <Filter>SimpleGL</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
