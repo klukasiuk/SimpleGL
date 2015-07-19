@@ -40,7 +40,11 @@ FTGLPixmapFont * font = NULL;       // Czcionka
 int window_height;                  // wymiary okna
 int window_width;
 
-int fontSize = 12;
+int fontSize = 12;                  // Domyœlna wielkoœæ czcionki
+
+int layers = 3;                     // Liczba warstw
+
+int currentlayer = 1;                  // Obecna warstwa                          
 
 bool waiting = false;               // stan oczekiwania na event klawiatry
 
@@ -158,7 +162,7 @@ void initGL(int w , int h)
 	glMatrixMode(GL_PROJECTION);                                                // Macierz projekcji = jednsotkowa
 	glLoadIdentity();
 
-	glOrtho(0,w,0,h,-1,1);                                                      // Obszar projekcji
+	glOrtho(0,w,0,h,-5,5);                                                      // Obszar projekcji
 
 	glMatrixMode(GL_MODELVIEW);                                                 // Macierz modelowania = jednsotkowa
 	glLoadIdentity();	
@@ -172,6 +176,19 @@ void initGL(int w , int h)
     glEnable( GL_BLEND );	                                                	// Mieszanie kolorów
 
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );                        //Funkcja mieszania kolorów
+
+	glEnable(GL_DEPTH_TEST);                                                    // Testy buforu g³ebokoœci
+
+	glDepthFunc(GL_GREATER);                                                     // Funkcja buforu g³ebokoœci
+
+	glDepthRange(0.0f, 1.0f);                                               	// Zakres Depth Buforu
+
+		// Wartoœæ czyszczenie depth buforu
+	glClearDepth(1.0f);
+
+	glEnable ( GL_ALPHA_TEST ) ;                                                // Alfa testy
+
+	glAlphaFunc ( GL_GREATER, 0.1 ) ;                                           // Funkcja alfa
 
 	glPointSize(1);                                                           	// Wielkoœæ punktów
 
@@ -314,12 +331,33 @@ void setFontSize(int size)
 
 
 
+// Ustawia rzutowanie prostok¹tne w okreœlonym obszarze
+void Orthogonal(float left , float right , float top , float bottom)
+{
+    glMatrixMode(GL_PROJECTION);                                                // Macierz projekcji = jednsotkowa
+	glLoadIdentity();
+
+	glOrtho(left,right,bottom,top,-5,5);                                                      // Obszar projekcji
+
+	glMatrixMode(GL_MODELVIEW);                                                 // Macierz modelowania = jednsotkowa
+	glLoadIdentity();	
+
+}
+
+// Wybiera warstwê
+void selectLayer(int layer)
+{
+ currentlayer = layer;
+}
+
+
+
 // Punkt ( wielkoœc okreœle setPointSize)
 void point(float x , float y)
 {
 	glBegin(GL_POINTS);
 
-	glVertex2f(x,y);
+	glVertex3f(x,y,currentlayer);
 
 	glEnd();
 
@@ -331,8 +369,8 @@ void line(float x1 , float y1 , float x2 , float y2)
 {
 	glBegin(GL_LINES);
 
-	glVertex2f(x1,y1);
-	glVertex2f(x2,y2);
+	glVertex3f(x1,y1,currentlayer);
+	glVertex3f(x2,y2,currentlayer);
 
 	glEnd();
 
@@ -360,7 +398,7 @@ void circle(float cx , float cy , float r)
 
 	for(int i=0;i<vertNum;i++) 
 	{ 
-		glVertex2f(x + cx, y + cy);                    // Wysy³am wierzcho³ek
+		glVertex3f(x + cx, y + cy,currentlayer);       // Wysy³am wierzcho³ek
         
 
 		x2 = cosinus * x  -   sinus * y;               // Obrót macierz¹
@@ -379,7 +417,7 @@ void circle(float cx , float cy , float r)
 // Rysuje tekst w danym miejscu
 void text(int x , int y , char * t)
 {
-  glRasterPos2i(x,y);
+  glRasterPos3i(x,y,currentlayer);
   font->Render(t);
 
   glFlush();
@@ -388,7 +426,7 @@ void text(int x , int y , char * t)
 // Czyszczenie ekranu
 void clear()
 {
-   glClear( GL_COLOR_BUFFER_BIT );
+   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
 // Ustawienie koloru RGB ( 0 - 255 )

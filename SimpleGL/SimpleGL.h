@@ -46,6 +46,14 @@ void errorMsg(char * msg);
 void errorCritical(char * msg);
 
 
+// Rzutowanie
+
+// Ustawia rzutowanie prostok¹tne w okreœlonym obszarze
+void Orthogonal(float left , float top , float right , float bottom);
+
+// Wybiera warstwê
+void selectLayer(int layer);
+
 // Rysowanie
 
 
