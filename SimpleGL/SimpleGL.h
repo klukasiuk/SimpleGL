@@ -1,8 +1,8 @@
 #pragma once
 
 
-
 // Obs³uga okienka
+
 
 
 // Inicjalizacja okna graficznego
@@ -22,12 +22,21 @@ void wait();
 
 
 
-//
+// Ustawia kolor czysczenia ekranu
 void setClearColor(int r , int g , int b);
 
-// 
+// Ustawia wielkoœæ rysowanych punktów
+void setPointSize(float size);
+
+// Wczytuje czcionkê
+void setFont(char * name);
+
+// Ustawiam wielkoœæ czcionki
+void setFontSize(int size);
+
 
 // Obs³uga b³êdów
+
 
 
 // Wyrzuca message boxa z b³êdem
@@ -41,7 +50,7 @@ void errorCritical(char * msg);
 
 
 
-// Punkt
+// Punkt ( wielkoœc okreœle setPointSize)
 void point(float x , float y);
 
 // Odcinek miêdzy dwoma punktami
@@ -60,8 +69,8 @@ void clear();
 void setColor(int r , int g , int b);
 
 
-
 // Rysowanie obrazków
+
 
 
 // Wczytuje plik do tekstury i zwraca ID

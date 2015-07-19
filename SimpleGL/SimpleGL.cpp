@@ -40,6 +40,8 @@ FTGLPixmapFont * font = NULL;       // Czcionka
 int window_height;                  // wymiary okna
 int window_width;
 
+int fontSize = 12;
+
 bool waiting = false;               // stan oczekiwania na event klawiatry
 
 bool released = true;               // flaga zwolnienie zasobów ( sprawdzana atexit )
@@ -106,12 +108,13 @@ void errorCritical(char * msg)
 }
 
 
+
+// Funkcja atexit , pilnuje zwolnienia zasobów
 void atEnd()
 {
 	if( released == false )
 	error(" Nie zwolniono pamiêci . Upewnij siê ¿e u¿ywasz funkcji end() do zakoñczenie programu .");
 }
-
 
 // Inicjalizacja okna graficznego
 void initGL(int w , int h)                                                      
@@ -181,7 +184,7 @@ void initGL(int w , int h)
 	if(font->Error())                                                           // Sprawdzam czy siê uda³o
     error("FTGL nie za³adowa³ czcionki",fontName);
 
-	font->FaceSize(12);                                                         // Wielkoœæ czcionki
+	font->FaceSize(fontSize);                                                         // Wielkoœæ czcionki
 
 	font->UseDisplayList(true);                                                 // U¿ywam list wyœwietlania
 
@@ -259,6 +262,69 @@ void wait()
 }
 
 
+
+// Ustawia kolor czysczenia ekranu
+void setClearColor(int r , int g , int b)
+{
+   glClearColor(r,g,b,0);
+}
+
+// Ustawia wielkoœæ rysowanych punktów
+void setPointSize(float size)
+{
+  glPointSize(size);
+}
+
+// Wczytuje czcionkê
+void setFont(char * name)
+{
+  if(font == NULL)                                                              // Jeœli czcionka nie zosta³a jeszcze wczytana
+  {
+     fontName = name;                                                           // Zmienaiam nazwê czcionki
+	 return;
+  }
+
+  FTGLPixmapFont * newfont = new FTGLPixmapFont(name);                           // Wczytuje now¹ czcionkê
+
+  if(newfont->Error())                                                           // Sprawdzam czy siê uda³o
+  {
+	delete newfont;                                                              // Jeœli nie to usuwam zadeklarowan¹ pamiêæ
+    MsgBox("FTGL nie móg³ za³adowaæ nowej czcionki ","ERROR");
+	return;
+  }
+
+  newfont->FaceSize(fontSize);                                                   // Wielkoœæ czcionki
+
+  newfont->UseDisplayList(true);                                                 // U¿ywam list wyœwietlania
+
+  delete font;                                                                   // Usuwam star¹ czcionkê
+
+  font = newfont;                                                                // Podmieniam wskaŸnik na now¹
+}
+
+// Ustawiam wielkoœæ czcionki
+void setFontSize(int size)
+{
+  fontSize = size;
+
+  font->FaceSize(fontSize);
+
+  font->UseDisplayList(true); 
+}
+
+
+
+// Punkt ( wielkoœc okreœle setPointSize)
+void point(float x , float y)
+{
+	glBegin(GL_POINTS);
+
+	glVertex2f(x,y);
+
+	glEnd();
+
+	glFlush();
+}
 
 // Odcinek miêdzy dwoma punktami
 void line(float x1 , float y1 , float x2 , float y2)
