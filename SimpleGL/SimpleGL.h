@@ -54,6 +54,7 @@ void Orthogonal(float left , float top , float right , float bottom);
 // Wybiera warstwê
 void selectLayer(int layer);
 
+
 // Rysowanie
 
 
@@ -79,6 +80,9 @@ void clear();
 // Ustawienie koloru RGB ( 0 - 255 )
 void setColor(int r , int g , int b);
 
+// Ustawia szary kolor ( 0 - 255 )
+void setGray(int value);
+
 
 // Rysowanie obrazków
 
@@ -92,3 +96,6 @@ void drawImage(int ID , float left , float top , float right , float bottom);
 
 // Ustawia podany kolor na zupe³nie przezroczyste t³o
 void keyColor(int ID , int r , int g , int b);
+
+// Zapisuje zrzut ekranu pod podan¹ nazw¹ w formacie BMP
+void screenshot(char * filename);

@@ -103,6 +103,12 @@ void errorMsg(char * msg)
   MsgBox( msg, "USER DEFINED ERROR :(" );
 }
 
+// Wyrzuca message boxa z b³êdem
+void errorMsg(string msg)
+{
+  MsgBox( msg.data(), "LIBRARY ERROR :(" );
+}
+
 //Wyrzuca message boxa nastêpnie zwalnia pamiêæ i koñczy program
 void errorCritical(char * msg)
 {
@@ -138,14 +144,17 @@ void initGL(int w , int h)
 
     glfwGetVersion(&major, &minor, &rev);                                       // Pobieram wersje OpenGL
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);                          // Ustawiam j¹ jako preferowan¹
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);                          // Ustawiam j¹ jako preferowan¹
+   // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
 
 
 	glfwWindowHint( GLFW_DOUBLEBUFFER,GL_FALSE );                               // Wy³¹czam podwójne buforowanie
 
 
     window = glfwCreateWindow( w , h , "OpenFrame", NULL , NULL );              // Tworzenie okna
+
+	window_width = w;
+	window_height = h;
 
 	if(window == NULL)                                                          // Sprawdzam utworzone okno
 	error("Nie utworzono okna");
@@ -457,6 +466,12 @@ void setColor(int r , int g , int b)
   glColor3ub(r,g,b);
 }
 
+// Ustawia szary kolor ( 0 - 255 )
+void setGray(int value)
+{
+  glColor3ub(value,value,value);
+}
+
 
 
 // Wczytuje plik do tekstury i zwraca ID
@@ -549,4 +564,25 @@ void keyColor(int ID , int r , int g , int b)
   delete[] pixels;                                                                        // Usuwam wczytane piksele
 
   glBindTexture( GL_TEXTURE_2D, NULL );                                                   // Odpinam teksture
+}
+
+// Zapisuje zrzut ekranu pod podan¹ nazw¹ w formacie BMP
+void screenshot(char * filename)
+{
+
+    int err = SOIL_save_screenshot
+	(
+		"screen.bmp",
+		SOIL_SAVE_TYPE_BMP,
+		0, 0, window_width, window_height
+	);
+
+	if(err == 0)
+	{
+		string s = "B³¹d biblioteki SOIL : ";
+
+		s += SOIL_last_result();
+
+	    errorMsg(s);
+	}
 }
