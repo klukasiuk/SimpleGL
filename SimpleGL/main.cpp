@@ -3,39 +3,74 @@
 
 int main()
 {
-  initGL(640,480);
+	float x[4];
+	float y[4];
 
-  setColor(255,0,255);
 
-  line( 0,0,300,300);
+	x[0] = 100;
+	x[1] = 250;
+	x[2] = 250;
+	x[3] = 100;
 
-  setFontSize(22);
+    y[0] = 300;
+	y[1] = 300;
+	y[2] = 350;
+	y[3] = 350;
+	
+	initGL(640,480);
 
-  setColor(0,255,255);
+	setFontSize(24);
 
-  text(400,100,"SimpleGL");
+	setColor(100,100,100);
 
-  setFont("calibri.ttf");
+    selectLayer(1);
 
-  setFontSize(14);
+	polygon(x,y,4);
 
-  text(400,150,"SimpleGL");
 
-  circle(200,200,200);
+	setColor(255,0,255);
 
-  int mario = loadImage("mario.png");
+	text(x[0] + 20 , y[0] + 18 , "Layer 1");
 
-  keyColor(mario,0,255,255);
+	for(int i=0;i<4;i++)
+	{
+	  x[i] += 40;
+	  y[i] -= 40;
+	}
 
-  drawImage(mario, 400,350,48*2,2*64);
+	setColor(120,120,120);
 
-  setPointSize(6);
+    selectLayer(2);
 
-  setColor(255,10,10);
+	polygon(x,y,4);
 
-  point(400,50);
+	setColor(255,0,255);
 
-  wait();
+	text(x[0] + 20 , y[0] + 18 , "Layer 2");
 
-  end();
+	for(int i=0;i<4;i++)
+	{
+	  x[i] += 40;
+	  y[i] -= 40;
+	}
+
+	setColor(140,140,140);
+
+    selectLayer(3);
+
+	polygon(x,y,4);
+
+	setColor(255,0,255);
+
+	text(x[0] + 20 , y[0] + 18 , "Layer 3");
+
+	for(int i=0;i<4;i++)
+	{
+	  x[i] += 20;
+	  y[i] -= 10;
+	}
+
+	wait();
+
+    end();
 }

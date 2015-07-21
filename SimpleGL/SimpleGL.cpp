@@ -42,9 +42,9 @@ int window_width;
 
 int fontSize = 12;                  // Domyœlna wielkoœæ czcionki
 
-int layers = 3;                     // Liczba warstw
+float layers = 3.0;                   // Liczba warstw
 
-int currentlayer = 1;                  // Obecna warstwa                          
+float currentlayer = 1.0;            // Obecna warstwa                          
 
 bool waiting = false;               // stan oczekiwania na event klawiatry
 
@@ -162,7 +162,7 @@ void initGL(int w , int h)
 	glMatrixMode(GL_PROJECTION);                                                // Macierz projekcji = jednsotkowa
 	glLoadIdentity();
 
-	glOrtho(0,w,0,h,-5,5);                                                      // Obszar projekcji
+	glOrtho(0,w,0,h,1,-layers-1);                                                      // Obszar projekcji
 
 	glMatrixMode(GL_MODELVIEW);                                                 // Macierz modelowania = jednsotkowa
 	glLoadIdentity();	
@@ -179,12 +179,11 @@ void initGL(int w , int h)
 
 	glEnable(GL_DEPTH_TEST);                                                    // Testy buforu g³ebokoœci
 
-	glDepthFunc(GL_GREATER);                                                     // Funkcja buforu g³ebokoœci
+	glDepthFunc(GL_LEQUAL);                                                     // Funkcja buforu g³ebokoœci
 
 	glDepthRange(0.0f, 1.0f);                                               	// Zakres Depth Buforu
 
-		// Wartoœæ czyszczenie depth buforu
-	glClearDepth(1.0f);
+	glClearDepth(1.0f);                                                         // Wartoœæ czyszczenie depth buforu
 
 	glEnable ( GL_ALPHA_TEST ) ;                                                // Alfa testy
 
@@ -219,6 +218,8 @@ void initGL(int w , int h)
 	// Na koniec w trosce o zwolnienie zasobów
 
 	released = false;
+
+	clear();
 
 	atexit(atEnd);
 }
@@ -337,7 +338,7 @@ void Orthogonal(float left , float right , float top , float bottom)
     glMatrixMode(GL_PROJECTION);                                                // Macierz projekcji = jednsotkowa
 	glLoadIdentity();
 
-	glOrtho(left,right,bottom,top,-5,5);                                                      // Obszar projekcji
+	glOrtho(left,right,bottom,top,1,layers);                                                      // Obszar projekcji
 
 	glMatrixMode(GL_MODELVIEW);                                                 // Macierz modelowania = jednsotkowa
 	glLoadIdentity();	
@@ -347,6 +348,12 @@ void Orthogonal(float left , float right , float top , float bottom)
 // Wybiera warstwê
 void selectLayer(int layer)
 {
+  if(layer < 1 || layer > layers)
+  {
+    errorMsg("Podany z³y numer warstwy");
+    return;
+  }
+
  currentlayer = layer;
 }
 
@@ -414,10 +421,25 @@ void circle(float cx , float cy , float r)
 	glFlush();
 }
 
-// Rysuje tekst w danym miejscu
-void text(int x , int y , char * t)
+// Wielok¹t ( tablica x , tablica y , iloœæ wierzcho³ków)
+void polygon( float * x , float * y , int n)
 {
-  glRasterPos3i(x,y,currentlayer);
+	glBegin(GL_POLYGON);                             // Rysowanie
+
+	for(int i=0;i<n;i++) 
+	{ 
+		glVertex3d(x[i],y[i],currentlayer);       // Wysy³am wierzcho³ek
+	} 
+
+	glEnd(); 
+
+	glFlush();
+}
+
+// Rysuje tekst w danym miejscu
+void text(float x , float y , char * t)
+{
+  glRasterPos3d(x,y,currentlayer - 0.1);
   font->Render(t);
 
   glFlush();

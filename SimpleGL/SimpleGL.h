@@ -67,8 +67,11 @@ void line(float x1 , float y1 , float x2 , float y2);
 // Ko³o o danym œrodku i promieniu
 void circle(float x , float y , float r);
 
+// Wielok¹t ( tablica x , tablica y , iloœæ wierzcho³ków)
+void polygon( float * x , float * y , int n);
+
 // Rysuje tekst w danym miejscu
-void text(int x , int y , char * t);
+void text(float x , float y , char * t);
 
 // Czyszczenie ekranu
 void clear();
