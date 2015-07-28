@@ -342,7 +342,7 @@ void setFontSize(int size)
 
 
 // Ustawia rzutowanie prostok¹tne w okreœlonym obszarze
-void View(float left , float right , float top , float bottom)
+void view(float left , float right , float top , float bottom)
 {
     glMatrixMode(GL_PROJECTION);                                                // Macierz projekcji = jednsotkowa
 	glLoadIdentity();

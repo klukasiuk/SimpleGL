@@ -49,7 +49,7 @@ void errorCritical(char * msg);
 // Rzutowanie
 
 // Ustawia rzutowanie prostok¹tne w okreœlonym obszarze
-void View(float left , float top , float right , float bottom);
+void view(float left , float top , float right , float bottom);
 
 // Wybiera warstwê
 void selectLayer(int layer);
