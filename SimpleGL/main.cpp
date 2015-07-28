@@ -35,7 +35,7 @@ int main()
 	for(int i=0;i<4;i++)
 	{
 	  x[i] += 40;
-	  y[i] -= 40;
+	  y[i] -= 30;
 	}
 
 	setColor(120,120,120);
@@ -51,7 +51,7 @@ int main()
 	for(int i=0;i<4;i++)
 	{
 	  x[i] += 40;
-	  y[i] -= 40;
+	  y[i] -= 30;
 	}
 
 	setColor(140,140,140);

@@ -342,12 +342,12 @@ void setFontSize(int size)
 
 
 // Ustawia rzutowanie prostok¹tne w okreœlonym obszarze
-void Orthogonal(float left , float right , float top , float bottom)
+void View(float left , float right , float top , float bottom)
 {
     glMatrixMode(GL_PROJECTION);                                                // Macierz projekcji = jednsotkowa
 	glLoadIdentity();
 
-	glOrtho(left,right,bottom,top,1,layers);                                                      // Obszar projekcji
+	glOrtho(left,right,bottom,top,1,layers);                                    // Obszar projekcji
 
 	glMatrixMode(GL_MODELVIEW);                                                 // Macierz modelowania = jednsotkowa
 	glLoadIdentity();	
