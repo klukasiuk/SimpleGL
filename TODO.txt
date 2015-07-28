@@ -1,5 +1,6 @@
 roadmap :
 
+- linux version
 - input( mouse and keybord )
 - 2D camera ( translation , rotation , zoom )
 - double buffered rendering 
