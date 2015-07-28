@@ -1,0 +1,18 @@
+roadmap :
+
+- input( mouse and keybord )
+- 2D camera ( translation , rotation , zoom )
+- double buffered rendering 
+- event driven programing
+- examples ( simple drawing , double buffered , event driven)
+- documentation
+- raytracer utilities ?
+- 3D rendering ??
+- simple GUI ??
+- integration with my physics lib ???
+
+
+to do :
+
+- color struct
+- pre defined colors
