@@ -1,0 +1,16 @@
+1. sudo apt-get install libsoil-dev libftgl-dev libsdl2-dev
+2. sudo apt-get build-dep glfw
+
+3. rêczna instalacja glfw3
+
+  pobraæ bibliotekê ze strony www.glfw.org
+  cd glfw3.x.x
+  sudo cmake -G "Unix Makefiles"
+  sudo make
+  sudo make install
+
+4.  Kompilacja
+
+sudo g++ -Wall main.cpp msgbox.cpp SimpleGL.cpp msgbox.h SimpleGL.h -o sgl.exec -std=c++11 -I/usr/include/freetype2 -lglfw3 -lSOIL - lftgl -lSDL2 -lSDL2main -lGL -lGLU `pkg-config --static --libs glfw3` `pkg-config --static --libs sdl2`
+
+5. Kopiowanie odpowiednich assetów(czcionki, grafika)
