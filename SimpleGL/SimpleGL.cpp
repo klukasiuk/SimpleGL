@@ -1,5 +1,7 @@
 #include "SimpleGL.h"
 
+// Makro definicje
+
 #define PI       3.14159265358979323846       
 
 // Biblioteka standardowa ( chrono i thread -> C++11 )
@@ -9,8 +11,6 @@
 #include <chrono>                   // funkcja Sleep
 #include <thread>                   // funkcja Sleep
 #include <string>                   // Pomocna w napisach( s1 + s2 itd. )
-
-#include <fstream>
 
 
 // Dodatkowe biblioteki do OpenGL
@@ -42,17 +42,25 @@ int window_width;
 
 int fontSize = 12;                  // Domyœlna wielkoœæ czcionki
 
-float layers = 3.0;                   // Liczba warstw
+float layers = 3.0;                 // Liczba warstw
 
-float currentlayer = 1.0;            // Obecna warstwa                          
-
-bool waiting = false;               // stan oczekiwania na event klawiatry
-
-bool released = true;               // flaga zwolnienie zasobów ( sprawdzana atexit )
+float currentlayer = 1.0;           // Obecna warstwa      
 
 vector<GLuint> IDs;                 // wektor z ID tekstur
 
 string fontName = "arial.ttf";      // Nazwa domyœlnej czcionki ( dostêpne jeszcze calibri)
+
+
+
+// Stany biblioteki
+
+bool waiting = false;               // stan oczekiwania na event klawiatry
+
+bool inited = false;                // stan zainicjowania biblioteki
+
+bool released = true;               // stan zwolnienie zasobów ( sprawdzany atexit )
+
+bool doublebuffered = false;        // stan podwójnego buforowania
 
 
 
@@ -119,6 +127,28 @@ void errorCritical(char * msg)
 
 
 
+// Standardowy callback klawiatury
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (action == GLFW_PRESS && key == GLFW_KEY_ESCAPE)
+    end();
+
+	if(glfwWindowShouldClose(window))
+	end();
+}
+
+// Callback dla klawiatury podczas oczekiwania na wciœniecia klawisza
+void waitingCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (action == GLFW_PRESS)
+    waiting = false;
+
+	if(glfwWindowShouldClose(window))
+	end();
+}
+
+
+
 // Funkcja atexit , pilnuje zwolnienia zasobów
 void atEnd()
 {
@@ -132,7 +162,7 @@ void initGL(int w , int h)
 	// Najpierw samo okno
 
 
-	glfwSetErrorCallback(error);                                               // Callback dla b³êdów GLFW
+	glfwSetErrorCallback(error);                                                // Callback dla b³êdów GLFW
 
 	int result = glfwInit();                                                    // Inicjalizacja GLFW
 
@@ -140,27 +170,44 @@ void initGL(int w , int h)
 	error("Nie zainicjalizowano glfw");
 
 
-	int major, minor, rev;
-
-    glfwGetVersion(&major, &minor, &rev);                                       // Pobieram wersje OpenGL
-
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);                          // Ustawiam j¹ jako preferowan¹
-   // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
-
-
+	if(!doublebuffered)
 	glfwWindowHint( GLFW_DOUBLEBUFFER,GL_FALSE );                               // Wy³¹czam podwójne buforowanie
 
 
-    window = glfwCreateWindow( w , h , "OpenFrame", NULL , NULL );              // Tworzenie okna
+    window = glfwCreateWindow( w , h , "SimpleGL", NULL , NULL );               // Tworzenie okna
+
+	
+	if(window == NULL)                                                          // Sprawdzam utworzone okno
+	{
+		
+		int major, minor, rev;                                                  // Próbuje utworzyæ kontekst z inn¹ wersj¹ OGL
+
+        glfwGetVersion(&major, &minor, &rev);                                   // Pobieram wersje OpenGL
+
+	    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);                      // Ustawiam j¹ jako preferowan¹
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
+
+
+		window = glfwCreateWindow( w , h , "SimpleGL", NULL , NULL );           // Znowu tworzenie okna
+
+
+		if(window == NULL)                                                      // Sprawdzam czy tym razem siê uda³o
+	    {
+	       error("Nie utworzono okna");                                         // Nic ju¿ nie pomo¿e , wywalam b³¹d
+		}
+	}
+
+	inited = true;
+
 
 	window_width = w;
 	window_height = h;
 
-	if(window == NULL)                                                          // Sprawdzam utworzone okno
-	error("Nie utworzono okna");
-
 
     glfwMakeContextCurrent(window);	                                            // Wybieram kontekst
+
+
+	glfwSetKeyCallback(window,keyCallback);
 
 
 	// Teraz OpenGL
@@ -171,7 +218,7 @@ void initGL(int w , int h)
 	glMatrixMode(GL_PROJECTION);                                                // Macierz projekcji = jednsotkowa
 	glLoadIdentity();
 
-	glOrtho(0,w,0,h,1,-layers-1);                                                      // Obszar projekcji
+	glOrtho(0,w,0,h,1,-layers-1);                                               // Obszar projekcji
 
 	glMatrixMode(GL_MODELVIEW);                                                 // Macierz modelowania = jednsotkowa
 	glLoadIdentity();	
@@ -265,35 +312,23 @@ void sleep(int miliseconds)
     std::this_thread::sleep_for( dura );
 }
 
-// Callback dla klawiatury podczas oczekiwania na wciœniecia klawisza
-void waiting_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (action == GLFW_PRESS)
-    waiting = false;
-}
-
 // Pauza do naciœniêcia klawisza
 void wait()
 {
 	waiting = true;
 
-	glfwSetKeyCallback(window, waiting_callback);
+	glfwSetKeyCallback(window, waitingCallback);
 
 	while(waiting)
 	{
 	  glfwWaitEvents();
-
-	  if(glfwWindowShouldClose(window))
-	  end();
 	}
 }
 
-
-
 // Ustawia kolor czysczenia ekranu
-void setClearColor(int r , int g , int b)
+void setClearColor(double r , double g , double b)
 {
-   glClearColor(r,g,b,0);
+   glClearColor(r/255,g/255,b/255,0);
 }
 
 // Ustawia wielkoœæ rysowanych punktów
@@ -339,6 +374,22 @@ void setFontSize(int size)
   font->UseDisplayList(true); 
 }
 
+// Ustawia podwójne buforowanie
+void setDoubleBuffered(bool state)
+{
+	if(inited == false)
+	doublebuffered = state;
+	else
+	error("Podwójne buforowanie powinno byæ ustawione przed utworzeniem okna");
+}
+
+
+// Zwraca czas od pocz¹tku programu
+double getTime()
+{
+	return glfwGetTime();
+}
+
 
 
 // Ustawia rzutowanie prostok¹tne w okreœlonym obszarze
@@ -377,6 +428,7 @@ void point(float x , float y)
 
 	glEnd();
 
+	if(doublebuffered == false)
 	glFlush();
 }
 
@@ -390,6 +442,7 @@ void line(float x1 , float y1 , float x2 , float y2)
 
 	glEnd();
 
+	if(doublebuffered == false)
 	glFlush();
 }
 
@@ -427,6 +480,7 @@ void circle(float cx , float cy , float r)
 	} 
 	glEnd(); 
 
+	if(doublebuffered == false)
 	glFlush();
 }
 
@@ -442,6 +496,7 @@ void polygon( float * x , float * y , int n)
 
 	glEnd(); 
 
+	if(doublebuffered == false)
 	glFlush();
 }
 
@@ -451,6 +506,7 @@ void text(float x , float y , char * t)
   glRasterPos3d(x,y,currentlayer - 0.1);
   font->Render(t);
 
+  if(doublebuffered == false)
   glFlush();
 }
 
@@ -472,6 +528,27 @@ void setGray(int value)
   glColor3ub(value,value,value);
 }
 
+// Zamienia bufory okna , sprawdza eventy
+void swap()
+{
+	if(doublebuffered == false)
+	error(" Nie da siê zamieniæ buforów bez podwójnego buforowania");
+
+	glfwSwapBuffers(window);
+
+	checkEvents();
+
+	clear();
+}
+
+// Sprawdza eventy
+void checkEvents()
+{
+  glfwPollEvents();
+
+  if(glfwWindowShouldClose(window))
+  end();
+}
 
 
 // Wczytuje plik do tekstury i zwraca ID
@@ -523,6 +600,7 @@ void drawImage(int ID , float x , float y , float width , float height)
 
    glBindTexture( GL_TEXTURE_2D, NULL );
 
+   if(doublebuffered == false)
    glFlush();
 }
 

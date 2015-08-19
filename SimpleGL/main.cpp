@@ -1,74 +1,50 @@
 #include "SimpleGL.h"
+#include <math.h>
 
 
 int main()
 {
-	float x[4];
-	float y[4];
+	setDoubleBuffered(true);
 
-
-	x[0] = 100;
-	x[1] = 250;
-	x[2] = 250;
-	x[3] = 100;
-
-    y[0] = 300;
-	y[1] = 300;
-	y[2] = 350;
-	y[3] = 350;
-	
 	initGL(640,480);
 
-	setFontSize(24);
+	setClearColor(80,128,255);
 
-	setColor(100,100,100);
+	int mario = loadImage("mario.png");
+	int jump = loadImage("mario1.png");
 
-    selectLayer(1);
+	keyColor(mario,0,255,255);
+	keyColor(jump,0,255,255);
 
-	polygon(x,y,4);
+	int y = 0;
+	double time;
 
-
-	setColor(255,0,255);
-
-	text(x[0] + 20 , y[0] + 18 , "Layer 1");
-
-	for(int i=0;i<4;i++)
+	while(1)
 	{
-	  x[i] += 40;
-	  y[i] -= 30;
+	  for(int i=0;i<=64;i++)
+	  {
+	    y = 360* sin( i*(3.1415/64));
+
+		drawImage(jump,300,y,64,48);
+
+		swap();
+
+	    sleep(16);
+	  }
+	  
+
+	  drawImage(mario,300,0,64,48);
+
+	  swap();
+
+	  for(int i=0;i<10;i++)
+	  {
+	  sleep(200);
+	  checkEvents();
+	  }
+
 	}
 
-	setColor(120,120,120);
-
-    selectLayer(2);
-
-	polygon(x,y,4);
-
-	setColor(255,0,255);
-
-	text(x[0] + 20 , y[0] + 18 , "Layer 2");
-
-	for(int i=0;i<4;i++)
-	{
-	  x[i] += 40;
-	  y[i] -= 30;
-	}
-
-	setColor(140,140,140);
-
-    selectLayer(3);
-
-	polygon(x,y,4);
-
-	setColor(255,0,255);
-
-	text(x[0] + 20 , y[0] + 18 , "Layer 3");
-
-	for(int i=0;i<4;i++)
-	{
-	  x[i] += 20;
-	  y[i] -= 10;
-	}
 
 	wait();
 

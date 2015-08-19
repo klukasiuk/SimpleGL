@@ -1,3 +1,32 @@
+/*************************************************************************
+ * SimpleGL - www.github.com/mordimerr/simplegl
+ * A simple graphics library for novice C/C++ programers
+ * Based on : OpenGL , GLFW , SOIL and FTGL
+ *------------------------------------------------------------------------
+ *
+ * Copyright (c) 2015 Konrad £ukasiuk
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the author be held liable for any damages
+ * arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ *
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ *
+ *************************************************************************/
+
 #pragma once
 
 
@@ -23,7 +52,7 @@ void wait();
 
 
 // Ustawia kolor czysczenia ekranu
-void setClearColor(int r , int g , int b);
+void setClearColor(double r , double g , double b);
 
 // Ustawia wielkoœæ rysowanych punktów
 void setPointSize(float size);
@@ -33,6 +62,13 @@ void setFont(char * name);
 
 // Ustawiam wielkoœæ czcionki
 void setFontSize(int size);
+
+// Ustawia podwójne buforowanie
+void setDoubleBuffered(bool state);
+
+
+// Zwraca czas od pocz¹tku programu
+double getTime();
 
 
 // Obs³uga b³êdów
@@ -82,6 +118,13 @@ void setColor(int r , int g , int b);
 
 // Ustawia szary kolor ( 0 - 255 )
 void setGray(int value);
+
+// Zamienia bufory okna , sprawdza eventy
+void swap();
+
+
+// Sprawdza eventy
+void checkEvents();
 
 
 // Rysowanie obrazków
