@@ -1,5 +1,5 @@
 #include "SimpleGL.h"
-#include <math.h>
+#include <cmath>
 
 
 int main()

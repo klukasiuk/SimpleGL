@@ -15,9 +15,9 @@
 
 // Dodatkowe biblioteki do OpenGL
 
-#include <FTGL/ftgl.h>              // rysowanie tekstu
-#include <SOIL.h>                   // wczytywanie tekstur
-#include <glfw3.h>                  // obs³uga okna
+#include <FTGL/FTGL/ftgl.h>			// rysowanie tekstu
+#include <SOIL/SOIL.h>				// wczytywanie tekstur
+#include <GLFW/glfw3.h>					// obs³uga okna
 
 
 // Warstwa abstrakcji miêdzy windows.h(czyste z³o) a nasz¹ przestrzeni¹ nazw

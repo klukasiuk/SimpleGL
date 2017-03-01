@@ -6,8 +6,6 @@ roadmap :
 - event driven programing
 - examples ( simple drawing , double buffered , event driven)
 - documentation
-- raytracer utilities ?
-- 3D rendering ??
 - simple GUI ??
 - integration with my physics lib ???
 
