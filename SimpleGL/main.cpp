@@ -25,7 +25,7 @@ int main()
 	  {
 	    y = 360* sin( i*(3.1415/64));
 
-		drawImage(jump,300,y,64,48);
+		drawImage(jump,300,y+24,64,48,y);
 
 		swap();
 

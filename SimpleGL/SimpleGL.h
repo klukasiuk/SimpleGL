@@ -1,10 +1,10 @@
 /*************************************************************************
- * SimpleGL - www.github.com/mordimerr/simplegl
+ * SimpleGL - www.github.com/klukasiuk/simplegl
  * A simple graphics library for novice C/C++ programers
  * Based on : OpenGL , GLFW , SOIL and FTGL
  *------------------------------------------------------------------------
  *
- * Copyright (c) 2015 Konrad £ukasiuk
+ * Copyright (c) 2017 Konrad £ukasiuk
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the author be held liable for any damages
@@ -135,7 +135,16 @@ void checkEvents();
 int loadImage(char * path);
 
 // Rysuje teksture o ID w danym miejscu ( x , y , szerokoœæ , wysokoœæ) x,y lewego dolnego wierzcho³ka
-void drawImage(int ID , float left , float top , float right , float bottom);
+void drawImage(int ID , float x, float y, float width, float height);
+
+// Rysuje teksture o ID w danym miejscu ( x , y , szerokoœæ , wysokoœæ, rotacja) x,y lewego dolnego wierzcho³ka k¹t w stopniach
+void drawImage(int ID, float x, float y, float width, float height, int rotation);
+
+// Rysuje teksture o ID w danym miejscu ( x , y , szerokoœæ , wysokoœæ) xy to œrodek
+void drawImageCentered(int ID, float x, float y, float width, float height);
+
+// Rysuje teksture o ID w danym miejscu ( x , y , szerokoœæ , wysokoœæ, k¹t) xy to œrodek a k¹t jest w stopniach
+void drawImageCentered(int ID, float x, float y, float width, float height, int rotation);
 
 // Ustawia podany kolor na zupe³nie przezroczyste t³o
 void keyColor(int ID , int r , int g , int b);

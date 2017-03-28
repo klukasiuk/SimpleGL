@@ -604,6 +604,100 @@ void drawImage(int ID , float x , float y , float width , float height)
    glFlush();
 }
 
+// Rysuje teksture o ID w danym miejscu ( x , y , szerokoœæ , wysokoœæ, rotacja) x,y lewego dolnego wierzcho³ka
+void drawImage(int ID, float x, float y, float width, float height, int rotation)
+{
+	glBindTexture(GL_TEXTURE_2D, ID);                        // Wybieramy teksture 
+
+	glColor3f(1.0, 1.0, 1.0);                           // Modyfikacja koloru
+
+	if (rotation != 0)                                        // Obracamy macierz
+	{
+		glPushMatrix();
+
+		glTranslatef(x + width/2, y + height/2, 0);
+		glRotatef((float)rotation, 0.0f, 0.0f, 1.0f);
+		glTranslatef(-(x + width / 2), -(y + height / 2), 0);
+	}
+
+	glBegin(GL_QUADS);                                       // Zaczynamy rysowanie
+
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(x + width, y);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(x + width, y + height);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y + height);
+
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, NULL);
+
+	if (rotation != 0)
+		glPopMatrix();
+
+	if (doublebuffered == false)
+		glFlush();
+}
+
+void drawImageCentered(int ID, float x, float y, float width, float height)
+{
+	glBindTexture(GL_TEXTURE_2D, ID);                        // Wybieramy teksture 
+
+	glColor3f(1.0, 1.0, 1.0);								 // Modyfikacja koloru
+
+	float hw = width / 2;
+	float hh = height / 2;
+
+	glBegin(GL_QUADS);                                       // Zaczynamy rysowanie
+
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(x - hw, y - hh);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(x + hw, y - hh);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(x + hw, y + hh);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(x - hw, y + hh);
+
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, NULL);
+
+	if (doublebuffered == false)
+		glFlush();
+}
+
+void drawImageCentered(int ID, float x, float y, float width, float height, int rotation)
+{
+	glBindTexture(GL_TEXTURE_2D, ID);                        // Wybieramy teksture 
+
+	glColor3f(1.0, 1.0, 1.0);								 // Modyfikacja koloru
+
+	float hw = width / 2;
+	float hh = height / 2;
+
+	if (rotation != 0)                                        // Obracamy macierz
+	{
+		glPushMatrix();
+
+		glTranslatef(x, y, 0);
+		glRotatef((float)rotation, 0.0f, 0.0f, 1.0f);
+		glTranslatef(-x, -y, 0);
+	}
+
+	glBegin(GL_QUADS);                                       // Zaczynamy rysowanie
+
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(x - hw, y - hh);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(x + hw, y - hh);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(x + hw, y + hh);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(x - hw, y + hh);
+
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, NULL);
+
+	if (rotation != 0)
+	glPopMatrix();
+
+	if (doublebuffered == false)
+	glFlush();
+}
+
 // Ustawia podany kolor na zupe³nie przezroczyste t³o
 void keyColor(int ID , int r , int g , int b)
 {
