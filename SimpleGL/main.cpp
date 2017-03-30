@@ -91,7 +91,7 @@ void update()
 		}
 	}
 
-	//sleep(sleep_time);
+	sleep(sleep_time);
 }
 
 // This function is drawing everything and swaping buffers if there is double buffering
