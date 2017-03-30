@@ -16,7 +16,7 @@ int mario_rotation;
 const int jump_period = 3000;
 const int standing_time = 1000;
 const int ground_clamping = 10;
-const int sleep_time = 30;
+const int sleep_time = 16;
 
 // Initialization function
 void init()
@@ -66,7 +66,7 @@ void input()
 // Updating program state
 void update()
 {
-	int time = (int)(getTime()*1000);
+	int time = (int)getTime();
 
 	// Getting time in animation period
 	time = time % jump_period;
@@ -91,7 +91,7 @@ void update()
 		}
 	}
 
-	sleep(sleep_time);
+	//sleep(sleep_time);
 }
 
 // This function is drawing everything and swaping buffers if there is double buffering
