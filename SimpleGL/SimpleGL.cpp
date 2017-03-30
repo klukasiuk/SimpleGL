@@ -1,71 +1,68 @@
 #include "SimpleGL.h"
 
-// Makro definicje
+// Macros
 
 #define PI       3.14159265358979323846       
 
-// Biblioteka standardowa ( chrono i thread -> C++11 )
+// Std libraries ( chrono i thread -> C++11 )
 
-#include <math.h>                   // funckje matematyczne
-#include <vector>                   // Dynamiczna tablica
-#include <chrono>                   // funkcja Sleep
-#include <thread>                   // funkcja Sleep
-#include <string>                   // Pomocna w napisach( s1 + s2 itd. )
+#include <math.h>                   // math functions
+#include <vector>                   // dynamic array -> vector
+#include <chrono>                   // function Sleep
+#include <thread>                   // function Sleep
+#include <string>                   // Very handy in working with text
+
+// Additional libs to OpenGL
+
+#include <FTGL/FTGL/ftgl.h>			// text drawing
+#include <SOIL/SOIL.h>				// loading images
+#include <GLFW/glfw3.h>				// window and os handling
 
 
-// Dodatkowe biblioteki do OpenGL
-
-#include <FTGL/FTGL/ftgl.h>			// rysowanie tekstu
-#include <SOIL/SOIL.h>				// wczytywanie tekstur
-#include <GLFW/glfw3.h>					// obs³uga okna
-
-
-// Warstwa abstrakcji miêdzy windows.h(czyste z³o) a nasz¹ przestrzeni¹ nazw
-// U¿ywam message boxa do raportowania b³êdów
+// Abstraction layer between os (windows.h) and this namespace
+// Msgbox is used in error handling
 #include "msgbox.h"
 
 
-// Wczytuje nazwy
+// Loading names
 
 using std::string;
 using std::to_string;
 using std::vector;
 
 
-// Zmienne globalne
+// Global state variables
 
-GLFWwindow * window = NULL;         // Uchwyt na okno
-FTGLPixmapFont * font = NULL;       // Czcionka
+GLFWwindow * window = NULL;         // Handle for window
+FTGLPixmapFont * font = NULL;       // Handle for font
 
-int window_height;                  // wymiary okna
+int window_height;                  // Window dimmensions
 int window_width;
 
-int fontSize = 12;                  // Domyœlna wielkoœæ czcionki
+int fontSize = 12;                  // Default font size
+float layers = 3.0;                 // Amount of layers
 
-float layers = 3.0;                 // Liczba warstw
+float currentlayer = 1.0;           // Current layer     
 
-float currentlayer = 1.0;           // Obecna warstwa      
+vector<GLuint> IDs;                 // array with all images IDs
 
-vector<GLuint> IDs;                 // wektor z ID tekstur
-
-string fontName = "arial.ttf";      // Nazwa domyœlnej czcionki ( dostêpne jeszcze calibri)
-
-
-
-// Stany biblioteki
-
-bool waiting = false;               // stan oczekiwania na event klawiatry
-
-bool inited = false;                // stan zainicjowania biblioteki
-
-bool released = true;               // stan zwolnienie zasobów ( sprawdzany atexit )
-
-bool doublebuffered = false;        // stan podwójnego buforowania
+string fontName = "arial.ttf";      // Name of default font
 
 
 
+// Lib states
 
-// Raportowanie b³êdu ( koñczy dzia³anie programu)
+bool waiting = false;               // state of waitning for keyboard event
+
+bool inited = false;                // state of lib initialization
+
+bool released = true;               // state of resorces realease
+
+bool doublebuffered = true;        // state of double buffering (it needs to be set before initialization)
+
+
+
+// Error reporting ( ends program)
 void error(string msg)
 {
   MsgBox(msg.data(),"LIBRARY ERROR :(");
@@ -73,7 +70,7 @@ void error(string msg)
   end();
 }
 
-// Raportowanie b³êdu ( koñczy dzia³anie programu)
+// Error reporting (ends program)
 void error(char * msg)
 {
   MsgBox( msg, "LIBRARY ERROR :(" );
@@ -81,7 +78,7 @@ void error(char * msg)
   end();
 }
 
-// Raportowanie b³êdu ( koñczy dzia³anie programu)
+// Error reporting ( ends program)
 void error(char * msg , string s)
 {
    string m = msg;
@@ -93,7 +90,7 @@ void error(char * msg , string s)
    end();
 }
 
-// Error callback dla GLFW
+// Error callback for GLFW
 void error(int code, const char * msg)
 {
    string m = msg;
@@ -105,19 +102,19 @@ void error(int code, const char * msg)
    end();
 }
 
-// Wyrzuca message boxa z b³êdem
+// Throws msgbox with error
 void errorMsg(char * msg)
 {
   MsgBox( msg, "USER DEFINED ERROR :(" );
 }
 
-// Wyrzuca message boxa z b³êdem
+// Throws msgbox with error
 void errorMsg(string msg)
 {
   MsgBox( msg.data(), "LIBRARY ERROR :(" );
 }
 
-//Wyrzuca message boxa nastêpnie zwalnia pamiêæ i koñczy program
+// Throws msgbox with error and ends program
 void errorCritical(char * msg)
 {
   MsgBox( msg, "USER DEFINED ERROR :(" );
@@ -127,7 +124,7 @@ void errorCritical(char * msg)
 
 
 
-// Standardowy callback klawiatury
+// Default keyboard callback
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (action == GLFW_PRESS && key == GLFW_KEY_ESCAPE)
@@ -137,7 +134,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 	end();
 }
 
-// Callback dla klawiatury podczas oczekiwania na wciœniecia klawisza
+// Waiting state keyboard callback
 void waitingCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (action == GLFW_PRESS)
@@ -149,51 +146,51 @@ void waitingCallback(GLFWwindow* window, int key, int scancode, int action, int 
 
 
 
-// Funkcja atexit , pilnuje zwolnienia zasobów
+// atexit function , it checks for realeasing resorces
 void atEnd()
 {
 	if( released == false )
-	error(" Nie zwolniono pamiêci . Upewnij siê ¿e u¿ywasz funkcji end() do zakoñczenie programu .");
+	error("Memory is not released. Check if you used end().");
 }
 
-// Inicjalizacja okna graficznego
+// Initialization of graphic window
 void initGL(int w , int h)                                                      
 {
-	// Najpierw samo okno
+	// First graphic window
 
 
-	glfwSetErrorCallback(error);                                                // Callback dla b³êdów GLFW
+	glfwSetErrorCallback(error);                                                // Callback for GLFW errors
 
-	int result = glfwInit();                                                    // Inicjalizacja GLFW
+	int result = glfwInit();
 
-	if(result == GL_FALSE )                                                     // Sprawdzam inicjalizacje
-	error("Nie zainicjalizowano glfw");
+	if(result == GL_FALSE )                                                     // Checking
+	error("Cannot init GLFW");
 
 
 	if(!doublebuffered)
-	glfwWindowHint( GLFW_DOUBLEBUFFER,GL_FALSE );                               // Wy³¹czam podwójne buforowanie
+	glfwWindowHint( GLFW_DOUBLEBUFFER,GL_FALSE );                               // Turning off doublebuffering
 
 
-    window = glfwCreateWindow( w , h , "SimpleGL", NULL , NULL );               // Tworzenie okna
+    window = glfwCreateWindow( w , h , "SimpleGL", NULL , NULL );               // Creating window
 
 	
-	if(window == NULL)                                                          // Sprawdzam utworzone okno
+	if(window == NULL)                                                          // Checking
 	{
 		
-		int major, minor, rev;                                                  // Próbuje utworzyæ kontekst z inn¹ wersj¹ OGL
+		int major, minor, rev;                                                  // Trying with other OGL version
 
-        glfwGetVersion(&major, &minor, &rev);                                   // Pobieram wersje OpenGL
+        glfwGetVersion(&major, &minor, &rev);                                   // Get OpenGL version
 
-	    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);                      // Ustawiam j¹ jako preferowan¹
+	    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);                      // Set that version
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
 
 
-		window = glfwCreateWindow( w , h , "SimpleGL", NULL , NULL );           // Znowu tworzenie okna
+		window = glfwCreateWindow( w , h , "SimpleGL", NULL , NULL );           // Again window creation
 
 
-		if(window == NULL)                                                      // Sprawdzam czy tym razem siê uda³o
+		if(window == NULL)                                                      // Checking again
 	    {
-	       error("Nie utworzono okna");                                         // Nic ju¿ nie pomo¿e , wywalam b³¹d
+	       error("Cannot create window");                                         // Nothing will help now , throw error 
 		}
 	}
 
@@ -204,64 +201,64 @@ void initGL(int w , int h)
 	window_height = h;
 
 
-    glfwMakeContextCurrent(window);	                                            // Wybieram kontekst
+    glfwMakeContextCurrent(window);	                                            // Choosing active context
 
 
 	glfwSetKeyCallback(window,keyCallback);
 
 
-	// Teraz OpenGL
+	// Now OpenGL
 
 
-	glViewport(0,0,w,h);						                                // Wybieram obszar wyswietlania
+	glViewport(0,0,w,h);						                                // Setting viewport
 
-	glMatrixMode(GL_PROJECTION);                                                // Macierz projekcji = jednsotkowa
+	glMatrixMode(GL_PROJECTION);                                                // projection matrix is identity
 	glLoadIdentity();
 
-	glOrtho(0,w,0,h,1,-layers-1);                                               // Obszar projekcji
+	glOrtho(0,w,0,h,1,-layers-1);                                               // Projection region
 
-	glMatrixMode(GL_MODELVIEW);                                                 // Macierz modelowania = jednsotkowa
+	glMatrixMode(GL_MODELVIEW);                                                 // model matrix is identity
 	glLoadIdentity();	
 
-	glClearColor(0,0,0,0);                                            	        // Kolor czyszczenia ekranu
+	glClearColor(0,0,0,0);                                            	        // default clear color
 
-	glClear( GL_COLOR_BUFFER_BIT );                                             // Czyszczê wstêpnie ekran
+	glClear( GL_COLOR_BUFFER_BIT );                                             // first clearing
 
-	glEnable(GL_TEXTURE_2D);                                                    // W³¹czam teksturowaie
+	glEnable(GL_TEXTURE_2D);                                                    // texturing
 
-    glEnable( GL_BLEND );	                                                	// Mieszanie kolorów
+    glEnable( GL_BLEND );	                                                	// blending
 
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );                        //Funkcja mieszania kolorów
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );                        // blending func
 
-	glEnable(GL_DEPTH_TEST);                                                    // Testy buforu g³ebokoœci
+	glEnable(GL_DEPTH_TEST);                                                    // teting for depth
 
-	glDepthFunc(GL_LEQUAL);                                                     // Funkcja buforu g³ebokoœci
+	glDepthFunc(GL_LEQUAL);                                                     // depth func
 
-	glDepthRange(0.0f, 1.0f);                                               	// Zakres Depth Buforu
+	glDepthRange(0.0f, 1.0f);                                               	// Range of depth
 
-	glClearDepth(1.0f);                                                         // Wartoœæ czyszczenie depth buforu
+	glClearDepth(1.0f);                                                         // clearing depth value
 
-	glEnable ( GL_ALPHA_TEST ) ;                                                // Alfa testy
+	glEnable ( GL_ALPHA_TEST ) ;                                                // Testing for alpha component(RGBA)
 
-	glAlphaFunc ( GL_GREATER, 0.1 ) ;                                           // Funkcja alfa
+	glAlphaFunc ( GL_GREATER, 0.1 ) ;                                           // Alpha func
 
-	glPointSize(1);                                                           	// Wielkoœæ punktów
-
-
-	// Teraz ³adujê czcionkê
+	glPointSize(1);                                                           	// Default point size
 
 
-	font = new FTGLPixmapFont(fontName.data());                                 // £aduje domyœln¹ czcionkê
-
-	if(font->Error())                                                           // Sprawdzam czy siê uda³o
-    error("FTGL nie za³adowa³ czcionki",fontName);
-
-	font->FaceSize(fontSize);                                                         // Wielkoœæ czcionki
-
-	font->UseDisplayList(true);                                                 // U¿ywam list wyœwietlania
+	// Next loading font
 
 
-	// Sprawdzam b³êdy OpenGL
+	font = new FTGLPixmapFont(fontName.data());                                 // loading deafault font
+
+	if(font->Error())                                                           // Checking
+    error("FTGL cannot load font",fontName);
+
+	font->FaceSize(fontSize);													// Font size
+
+	font->UseDisplayList(true);                                                 // Display list are really okay
+
+
+	// Are they any errors yet ?
 
 
 	GLenum glError;
@@ -269,9 +266,10 @@ void initGL(int w , int h)
     glError = glGetError();
 
     if (glError != GL_NO_ERROR)
-	error(glError,"Blad OpenGL");
+	error(glError,"OpenGL error");
 
-	// Na koniec w trosce o zwolnienie zasobów
+
+	// At the end caring for resorces releasing
 
 	released = false;
 
@@ -280,7 +278,7 @@ void initGL(int w , int h)
 	atexit(atEnd);
 }
 
-// Zwolnienie zasobów
+// Releasing resources
 void end()
 {
    if(font != NULL)
@@ -305,14 +303,14 @@ void end()
    exit(0);
 }
 
-// Uœpienie w¹tku 
+// Sleeping thread ( time in miliseconds )
 void sleep(int miliseconds)
 {
 	std::chrono::milliseconds dura( miliseconds );
     std::this_thread::sleep_for( dura );
 }
 
-// Pauza do naciœniêcia klawisza
+// Pause till any key is pressed
 void wait()
 {
 	waiting = true;
@@ -325,46 +323,48 @@ void wait()
 	}
 }
 
-// Ustawia kolor czysczenia ekranu
+// Set color used to clear the screen with clear()
 void setClearColor(double r , double g , double b)
 {
    glClearColor(r/255,g/255,b/255,0);
 }
 
-// Ustawia wielkoœæ rysowanych punktów
+// Sets point size
 void setPointSize(float size)
 {
   glPointSize(size);
 }
 
-// Wczytuje czcionkê
+// Loading font from file
 void setFont(char * name)
 {
-  if(font == NULL)                                                              // Jeœli czcionka nie zosta³a jeszcze wczytana
+  if(inited == false)															// If program wasnt initialized
   {
-     fontName = name;                                                           // Zmienaiam nazwê czcionki
+     fontName = name;															// Just change font name
 	 return;
   }
 
-  FTGLPixmapFont * newfont = new FTGLPixmapFont(name);                           // Wczytuje now¹ czcionkê
+  FTGLPixmapFont * newfont = new FTGLPixmapFont(name);							// Loading new font
 
-  if(newfont->Error())                                                           // Sprawdzam czy siê uda³o
+  if(newfont->Error())															// Checking 
   {
-	delete newfont;                                                              // Jeœli nie to usuwam zadeklarowan¹ pamiêæ
-    MsgBox("FTGL nie móg³ za³adowaæ nowej czcionki ","ERROR");
+	delete newfont;																// If something went wrong
+    MsgBox("FTGL cannot load font","ERROR");
 	return;
   }
 
-  newfont->FaceSize(fontSize);                                                   // Wielkoœæ czcionki
+  fontName = name;
 
-  newfont->UseDisplayList(true);                                                 // U¿ywam list wyœwietlania
+  newfont->FaceSize(fontSize);
 
-  delete font;                                                                   // Usuwam star¹ czcionkê
+  newfont->UseDisplayList(true);												// Use font display list
 
-  font = newfont;                                                                // Podmieniam wskaŸnik na now¹
+  delete font;																	// Delete old font
+
+  font = newfont;																// Swap pointer to font
 }
 
-// Ustawiam wielkoœæ czcionki
+// Setting font size
 void setFontSize(int size)
 {
   fontSize = size;
@@ -374,43 +374,51 @@ void setFontSize(int size)
   font->UseDisplayList(true); 
 }
 
-// Ustawia podwójne buforowanie
+// Setting double buffered mode(it needs to be set before initialization)
 void setDoubleBuffered(bool state)
 {
 	if(inited == false)
 	doublebuffered = state;
 	else
-	error("Podwójne buforowanie powinno byæ ustawione przed utworzeniem okna");
+	error("Double buffering needs to be set before initialization");
 }
 
-
-// Zwraca czas od pocz¹tku programu
+// Time from program start in miliseconds
 double getTime()
 {
-	return glfwGetTime();
+	return glfwGetTime()*1000;
 }
 
 
+// Swaping buffers , clearing screen and checking for events
+void checkEvents()
+{
+	glfwPollEvents();
 
-// Ustawia rzutowanie prostok¹tne w okreœlonym obszarze
+	if (glfwWindowShouldClose(window))
+		end();
+}
+
+
+// Sets view region to given coordinates
 void view(float left , float right , float top , float bottom)
 {
-    glMatrixMode(GL_PROJECTION);                                                // Macierz projekcji = jednsotkowa
+    glMatrixMode(GL_PROJECTION);                                                // projection matrix is identity
 	glLoadIdentity();
 
-	glOrtho(left,right,bottom,top,1,layers);                                    // Obszar projekcji
+	glOrtho(left,right,bottom,top,1,layers);                                    // Projection region
 
-	glMatrixMode(GL_MODELVIEW);                                                 // Macierz modelowania = jednsotkowa
+	glMatrixMode(GL_MODELVIEW);                                                 // projection matrix is identity
 	glLoadIdentity();	
 
 }
 
-// Wybiera warstwê
+// Select current layer
 void selectLayer(int layer)
 {
   if(layer < 1 || layer > layers)
   {
-    errorMsg("Podany z³y numer warstwy");
+    errorMsg("Wrong layer selected");
     return;
   }
 
@@ -418,8 +426,7 @@ void selectLayer(int layer)
 }
 
 
-
-// Punkt ( wielkoœc okreœle setPointSize)
+// Point ( size is set by setPointSize() )
 void point(float x , float y)
 {
 	glBegin(GL_POINTS);
@@ -432,7 +439,7 @@ void point(float x , float y)
 	glFlush();
 }
 
-// Odcinek miêdzy dwoma punktami
+// Line between two points
 void line(float x1 , float y1 , float x2 , float y2)
 {
 	glBegin(GL_LINES);
@@ -446,37 +453,36 @@ void line(float x1 , float y1 , float x2 , float y2)
 	glFlush();
 }
 
-// Ko³o o danym œrodku i promieniu
+// Circle in given point with given radius
 void circle(float cx , float cy , float r)
 {
-	float vertNum = floor(10.0f * sqrtf(r));           // Liczê liczbê wierzcho³ków (pod³oga bo musi byæ ca³kowita)
+	float vertNum = floor(10.0f * sqrtf(r));           // Counting vertices
 
-	float theta = 2 * PI / vertNum ;                   // Liczê k¹t miêdzy wiercho³kami
+	float theta = 2 * PI / vertNum ;                   // Angle between vertices
 
-	float cosinus = cosf(theta);                       // Liczê funkcje trygonometryczne dla theta
+	float cosinus = cosf(theta);                       // Caching trig functions for theta
 	float sinus   = sinf(theta);
 
-	float x = r;                                       // Wektor od œrodka do okrêgu ( dla 0 stopni )
+	float x = r;                                       // Radius vector ( 0 degrees )
 	float y = 0; 
 
-	float x2;                                          // Wektor pomocniczy
+	float x2;                                          // temp vector
 	float y2;
     
 
-	glBegin(GL_LINE_LOOP);                             // Rysowanie
+	glBegin(GL_LINE_LOOP);                             // Drawing
 
 	for(int i=0;i<vertNum;i++) 
 	{ 
-		glVertex3f(x + cx, y + cy,currentlayer);       // Wysy³am wierzcho³ek
+		glVertex3f(x + cx, y + cy,currentlayer);       // Send vertex to GPU
         
 
-		x2 = cosinus * x  -   sinus * y;               // Obrót macierz¹
+		x2 = cosinus * x  -   sinus * y;               // Matrix rotation of radius vector to temp
 		y2 = sinus   * x  + cosinus * y;
 
 
-		x = x2;                                        // Zapisuje wspó³rzêdne po transformacji
+		x = x2;                                        // From temp back to radius vector
 		y = y2;
-
 	} 
 	glEnd(); 
 
@@ -484,14 +490,14 @@ void circle(float cx , float cy , float r)
 	glFlush();
 }
 
-// Wielok¹t ( tablica x , tablica y , iloœæ wierzcho³ków)
+// Polygon ( array of x , array of y , number of vertices)
 void polygon( float * x , float * y , int n)
 {
-	glBegin(GL_POLYGON);                             // Rysowanie
+	glBegin(GL_POLYGON);
 
 	for(int i=0;i<n;i++) 
 	{ 
-		glVertex3d(x[i],y[i],currentlayer);       // Wysy³am wierzcho³ek
+		glVertex3d(x[i],y[i],currentlayer);
 	} 
 
 	glEnd(); 
@@ -500,7 +506,7 @@ void polygon( float * x , float * y , int n)
 	glFlush();
 }
 
-// Rysuje tekst w danym miejscu
+// Drawing text in given place
 void text(float x , float y , char * t)
 {
   glRasterPos3d(x,y,currentlayer - 0.1);
@@ -510,29 +516,29 @@ void text(float x , float y , char * t)
   glFlush();
 }
 
-// Czyszczenie ekranu
+// Clearing screnn with ClearColor
 void clear()
 {
    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
-// Ustawienie koloru RGB ( 0 - 255 )
+// Sets RGB color ( 0 - 255 )
 void setColor(int r , int g , int b)
 {
   glColor3ub(r,g,b);
 }
 
-// Ustawia szary kolor ( 0 - 255 )
+// Sets gray color ( 0 - 255 )
 void setGray(int value)
 {
   glColor3ub(value,value,value);
 }
 
-// Zamienia bufory okna , sprawdza eventy
+// Swaping buffers , clearing screen and checking for events
 void swap()
 {
 	if(doublebuffered == false)
-	error(" Nie da siê zamieniæ buforów bez podwójnego buforowania");
+	error("Cannot swap without double buffering");
 
 	glfwSwapBuffers(window);
 
@@ -541,22 +547,13 @@ void swap()
 	clear();
 }
 
-// Sprawdza eventy
-void checkEvents()
-{
-  glfwPollEvents();
 
-  if(glfwWindowShouldClose(window))
-  end();
-}
-
-
-// Wczytuje plik do tekstury i zwraca ID
+// Loading image from file and returning its ID
 int loadImage(char * path)
 {
   int ID;
 
-  ID = SOIL_load_OGL_texture     // Wczytujemy teskture , id zapisujemy
+  ID = SOIL_load_OGL_texture											 // Loading texture and saving ID
   (
   path,
   SOIL_LOAD_RGBA ,
@@ -564,11 +561,14 @@ int loadImage(char * path)
   SOIL_FLAG_INVERT_Y
   );
 
-  if(ID == 0)
-  error("Nie wczytano tekstury");
+  if (ID == 0)
+  {
+	  error("Texture is not loaded");
+	  return 0;
+  }
 
 
-  glBindTexture(GL_TEXTURE_2D, ID);                                       // Ustawiam filtrowanie tekstury 
+  glBindTexture(GL_TEXTURE_2D, ID);                                       // Texture filtering
 
   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
@@ -582,21 +582,21 @@ int loadImage(char * path)
   return ID;
 }
 
-// Rysuje teksture o ID w danym miejscu ( x , y , szerokoœæ , wysokoœæ) x,y lewego dolnego wierzcho³ka
+// Drawing image with given ID where x,y are coordinates of left bottom vertex
 void drawImage(int ID , float x , float y , float width , float height)
 {
-   glBindTexture(GL_TEXTURE_2D, ID);                        // Wybieramy teksture 
+	glBindTexture(GL_TEXTURE_2D, ID);						// Wybieramy teksture 
 
-   glColor3f(1.0, 1.0, 1.0);                           // Modyfikacja koloru
+	glColor3f(1.0, 1.0, 1.0);								// Color modification ( 1.0 1.0 1.0 is texture color)
 
-   glBegin(GL_QUADS);                                       // Zaczynamy rysowanie
+	glBegin(GL_QUADS);                                      // Drawing
 
-   glTexCoord2f(0.0f, 0.0f); glVertex2f(x         , y           );
-   glTexCoord2f(1.0f, 0.0f); glVertex2f(x + width , y           );
-   glTexCoord2f(1.0f, 1.0f); glVertex2f(x + width , y + height  );
-   glTexCoord2f(0.0f, 1.0f); glVertex2f(x         , y + height  );
+	glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y);
+	glTexCoord2f(1.0f, 0.0f); glVertex2f(x + width, y);
+	glTexCoord2f(1.0f, 1.0f); glVertex2f(x + width, y + height);
+	glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y + height);
 
-   glEnd();
+	glEnd();
 
    glBindTexture( GL_TEXTURE_2D, NULL );
 
@@ -604,14 +604,14 @@ void drawImage(int ID , float x , float y , float width , float height)
    glFlush();
 }
 
-// Rysuje teksture o ID w danym miejscu ( x , y , szerokoœæ , wysokoœæ, rotacja) x,y lewego dolnego wierzcho³ka
+// Drawing image with given ID where x,y are coordinates of left bottom vertex and rotation is in degrees
 void drawImage(int ID, float x, float y, float width, float height, int rotation)
 {
-	glBindTexture(GL_TEXTURE_2D, ID);                        // Wybieramy teksture 
+	glBindTexture(GL_TEXTURE_2D, ID);						// Wybieramy teksture 
 
-	glColor3f(1.0, 1.0, 1.0);                           // Modyfikacja koloru
+	glColor3f(1.0, 1.0, 1.0);								// Color modification ( 1.0 1.0 1.0 is texture color)
 
-	if (rotation != 0)                                        // Obracamy macierz
+	if (rotation != 0)										// Rotation matrix
 	{
 		glPushMatrix();
 
@@ -620,7 +620,7 @@ void drawImage(int ID, float x, float y, float width, float height, int rotation
 		glTranslatef(-(x + width / 2), -(y + height / 2), 0);
 	}
 
-	glBegin(GL_QUADS);                                       // Zaczynamy rysowanie
+	glBegin(GL_QUADS);										// Drawing
 
 	glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y);
 	glTexCoord2f(1.0f, 0.0f); glVertex2f(x + width, y);
@@ -638,16 +638,17 @@ void drawImage(int ID, float x, float y, float width, float height, int rotation
 		glFlush();
 }
 
+// Drawing image with given ID where x,y are coordinates of center of image
 void drawImageCentered(int ID, float x, float y, float width, float height)
 {
-	glBindTexture(GL_TEXTURE_2D, ID);                        // Wybieramy teksture 
+	glBindTexture(GL_TEXTURE_2D, ID);                        // Binding texture 
 
-	glColor3f(1.0, 1.0, 1.0);								 // Modyfikacja koloru
+	glColor3f(1.0, 1.0, 1.0);								 // Color modification ( 1.0 1.0 1.0 is texture color)
 
 	float hw = width / 2;
 	float hh = height / 2;
 
-	glBegin(GL_QUADS);                                       // Zaczynamy rysowanie
+	glBegin(GL_QUADS);                                       // Drawing
 
 	glTexCoord2f(0.0f, 0.0f); glVertex2f(x - hw, y - hh);
 	glTexCoord2f(1.0f, 0.0f); glVertex2f(x + hw, y - hh);
@@ -662,16 +663,17 @@ void drawImageCentered(int ID, float x, float y, float width, float height)
 		glFlush();
 }
 
+// Drawing image with given ID where x,y are coordinates of center of image and rotation is in degrees
 void drawImageCentered(int ID, float x, float y, float width, float height, int rotation)
 {
-	glBindTexture(GL_TEXTURE_2D, ID);                        // Wybieramy teksture 
+	glBindTexture(GL_TEXTURE_2D, ID);                        // Binding texture
 
-	glColor3f(1.0, 1.0, 1.0);								 // Modyfikacja koloru
+	glColor3f(1.0, 1.0, 1.0);								 // Color modification ( 1.0 1.0 1.0 is texture color)
 
 	float hw = width / 2;
 	float hh = height / 2;
 
-	if (rotation != 0)                                        // Obracamy macierz
+	if (rotation != 0)                                        // Rotation matrix
 	{
 		glPushMatrix();
 
@@ -680,7 +682,7 @@ void drawImageCentered(int ID, float x, float y, float width, float height, int 
 		glTranslatef(-x, -y, 0);
 	}
 
-	glBegin(GL_QUADS);                                       // Zaczynamy rysowanie
+	glBegin(GL_QUADS);                                       // Drawing
 
 	glTexCoord2f(0.0f, 0.0f); glVertex2f(x - hw, y - hh);
 	glTexCoord2f(1.0f, 0.0f); glVertex2f(x + hw, y - hh);
@@ -698,50 +700,48 @@ void drawImageCentered(int ID, float x, float y, float width, float height, int 
 	glFlush();
 }
 
-// Ustawia podany kolor na zupe³nie przezroczyste t³o
+// Changes all pixels with given color to transparent
 void keyColor(int ID , int r , int g , int b)
 {
+  int pixRGBA[4];                                                                         // var for getting pixel
 
-  int pixRGBA[4];                                                                         // Zmienna na pobrany pixel
-
-  int w;                                                                                  // Wymiary tekstury
+  int w;                                                                                  // teture dimmensions
   int h;
 
-  glBindTexture(GL_TEXTURE_2D, ID);                                                       // Binduje teksture  
+  glBindTexture(GL_TEXTURE_2D, ID);
 
-  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0 , GL_TEXTURE_WIDTH , (GLint*)&w);             // Pobieram wymiary
+  glGetTexLevelParameteriv(GL_TEXTURE_2D, 0 , GL_TEXTURE_WIDTH , (GLint*)&w);             // Getting dimmensions
   glGetTexLevelParameteriv(GL_TEXTURE_2D, 0 , GL_TEXTURE_HEIGHT, (GLint*)&h);
 
-  GLuint * pixels = new GLuint[ w * h ];                                                  // Tworzê tablicê na teksture
+  GLuint * pixels = new GLuint[ w * h ];                                                  // Array for texture
 
-  glGetTexImage( GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels );                   // Wczytuje
+  glGetTexImage( GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels );                   // Loading
 
   for(int i=0;i<w*h;i++)
   {
-	 GLubyte* col = (GLubyte*)&pixels[i];                                                 // Dekoduje pobrany piksel do RGBA
+	 GLubyte* col = (GLubyte*)&pixels[i];                                                 // Casting pixel to RGBA
 
      pixRGBA[0] = col[ 0 ];
      pixRGBA[1] = col[ 1 ];
      pixRGBA[2] = col[ 2 ];
      pixRGBA[3] = col[ 3 ];
 
-	 if(pixRGBA[0]== r && pixRGBA[1] == g && pixRGBA[2] == b)                             // Jeœli kolor siê zgadza
+	 if(pixRGBA[0]== r && pixRGBA[1] == g && pixRGBA[2] == b)                             // If this is key color
 	 {
 	   pixels[i] = 0;
 	 }
   }
 
-  glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, pixels );     // Wysy³am spowrotem do GPU
+  glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, pixels );     // Sedning back to GPU
 
-  delete[] pixels;                                                                        // Usuwam wczytane piksele
+  delete[] pixels;                                                                        // Deleting array
 
-  glBindTexture( GL_TEXTURE_2D, NULL );                                                   // Odpinam teksture
+  glBindTexture( GL_TEXTURE_2D, NULL );                                                   // Unbinding texture
 }
 
-// Zapisuje zrzut ekranu pod podan¹ nazw¹ w formacie BMP
+// Saving screeshot with given name in .bmp format
 void screenshot(char * filename)
 {
-
     int err = SOIL_save_screenshot
 	(
 		"screen.bmp",
@@ -751,7 +751,7 @@ void screenshot(char * filename)
 
 	if(err == 0)
 	{
-		string s = "B³¹d biblioteki SOIL : ";
+		string s = "SOIL library error : ";
 
 		s += SOIL_last_result();
 

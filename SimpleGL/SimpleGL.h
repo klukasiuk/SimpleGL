@@ -1,10 +1,10 @@
 /*************************************************************************
  * SimpleGL - www.github.com/klukasiuk/simplegl
  * A simple graphics library for novice C/C++ programers
- * Based on : OpenGL , GLFW , SOIL and FTGL
+ * Based on : OpenGL , GLFW , SOIL and FTGL libraries
  *------------------------------------------------------------------------
  *
- * Copyright (c) 2017 Konrad £ukasiuk
+ * Copyright (c) 2015-2017 Konrad £ukasiuk
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the author be held liable for any damages
@@ -30,124 +30,128 @@
 #pragma once
 
 
-// Obs³uga okienka
+// Window maintence
 
 
-
-// Inicjalizacja okna graficznego
+// Initialization of graphic window
 void initGL(int w , int h);
 
-// Zwolnienie zasobów
+// Releasing resources
 void end();
 
-// Uœpienie w¹tku 
+// Sleeping thread ( time in miliseconds )
 void sleep(int miliseconds);
 
-// Pauza do naciœniêcia klawisza
+// Pause till any key is pressed
 void wait();
 
 
-// Ustawienia
+
+// Settings
 
 
-
-// Ustawia kolor czysczenia ekranu
+// Set color used to clear the screen with clear()
 void setClearColor(double r , double g , double b);
 
-// Ustawia wielkoœæ rysowanych punktów
+// Sets point size
 void setPointSize(float size);
 
-// Wczytuje czcionkê
+// Loading font from file
 void setFont(char * name);
 
-// Ustawiam wielkoœæ czcionki
+// Setting font size
 void setFontSize(int size);
 
-// Ustawia podwójne buforowanie
+// Setting double buffered mode(it needs to be set before initialization)
 void setDoubleBuffered(bool state);
 
-
-// Zwraca czas od pocz¹tku programu
+// Time from program start in miliseconds
 double getTime();
 
 
-// Obs³uga b³êdów
+
+// Input 
 
 
-
-// Wyrzuca message boxa z b³êdem
-void errorMsg(char * msg);
-
-//Wyrzuca message boxa nastêpnie zwalnia pamiêæ i koñczy program
-void errorCritical(char * msg);
-
-
-// Rzutowanie
-
-// Ustawia rzutowanie prostok¹tne w okreœlonym obszarze
-void view(float left , float top , float right , float bottom);
-
-// Wybiera warstwê
-void selectLayer(int layer);
-
-
-// Rysowanie
-
-
-
-// Punkt ( wielkoœc okreœle setPointSize)
-void point(float x , float y);
-
-// Odcinek miêdzy dwoma punktami
-void line(float x1 , float y1 , float x2 , float y2);
-
-// Ko³o o danym œrodku i promieniu
-void circle(float x , float y , float r);
-
-// Wielok¹t ( tablica x , tablica y , iloœæ wierzcho³ków)
-void polygon( float * x , float * y , int n);
-
-// Rysuje tekst w danym miejscu
-void text(float x , float y , char * t);
-
-// Czyszczenie ekranu
-void clear();
-
-// Ustawienie koloru RGB ( 0 - 255 )
-void setColor(int r , int g , int b);
-
-// Ustawia szary kolor ( 0 - 255 )
-void setGray(int value);
-
-// Zamienia bufory okna , sprawdza eventy
-void swap();
-
-
-// Sprawdza eventy
+// Checking for events and inputs
 void checkEvents();
 
 
-// Rysowanie obrazków
+
+// Error handling
+
+
+// Throws out message box with given message
+void errorMsg(char * msg);
+
+// Throws out message box with given message and ends program
+void errorCritical(char * msg);
 
 
 
-// Wczytuje plik do tekstury i zwraca ID
+// Projection
+
+
+// Sets view region to given coordinates
+void view(float left , float top , float right , float bottom);
+
+// Select current layer
+void selectLayer(int layer);
+
+
+
+// Drawing functions
+
+
+// Point ( size is set by setPointSize() )
+void point(float x , float y);
+
+// Line between two points
+void line(float x1 , float y1 , float x2 , float y2);
+
+// Circle in given point with given radius
+void circle(float x , float y , float r);
+
+// Polygon ( array of x , array of y , number of vertices)
+void polygon( float * x , float * y , int n);
+
+// Drawing text in given place
+void text(float x , float y , char * t);
+
+// Clearing screnn with ClearColor
+void clear();
+
+// Sets RGB color ( 0 - 255 )
+void setColor(int r , int g , int b);
+
+// Sets gray color ( 0 - 255 )
+void setGray(int value);
+
+// Swaping buffers , clearing screen and checking for events
+void swap();
+
+
+
+// Drawing images
+
+
+// Loading image from file and returning its ID
 int loadImage(char * path);
 
-// Rysuje teksture o ID w danym miejscu ( x , y , szerokoœæ , wysokoœæ) x,y lewego dolnego wierzcho³ka
+// Drawing image with given ID where x,y are coordinates of left bottom vertex
 void drawImage(int ID , float x, float y, float width, float height);
 
-// Rysuje teksture o ID w danym miejscu ( x , y , szerokoœæ , wysokoœæ, rotacja) x,y lewego dolnego wierzcho³ka k¹t w stopniach
+// Drawing image with given ID where x,y are coordinates of left bottom vertex and rotation is in degrees
 void drawImage(int ID, float x, float y, float width, float height, int rotation);
 
-// Rysuje teksture o ID w danym miejscu ( x , y , szerokoœæ , wysokoœæ) xy to œrodek
+// Drawing image with given ID where x,y are coordinates of center of image
 void drawImageCentered(int ID, float x, float y, float width, float height);
 
-// Rysuje teksture o ID w danym miejscu ( x , y , szerokoœæ , wysokoœæ, k¹t) xy to œrodek a k¹t jest w stopniach
+// Drawing image with given ID where x,y are coordinates of center of image and rotation is in degrees
 void drawImageCentered(int ID, float x, float y, float width, float height, int rotation);
 
-// Ustawia podany kolor na zupe³nie przezroczyste t³o
+// Changes all pixels with given color to transparent
 void keyColor(int ID , int r , int g , int b);
 
-// Zapisuje zrzut ekranu pod podan¹ nazw¹ w formacie BMP
+// Saving screeshot with given name in .bmp format
 void screenshot(char * filename);
