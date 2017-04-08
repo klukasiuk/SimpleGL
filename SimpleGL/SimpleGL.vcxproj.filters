@@ -50,5 +50,8 @@
     <ClInclude Include="msgbox.h">
       <Filter>SimpleGL</Filter>
     </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>SimpleGL</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -62,6 +62,12 @@ bool doublebuffered = true;        // state of double buffering (it needs to be 
 
 
 
+// Function pointers
+
+void (*userMouseCallback)    (int x, int y, MouseButton mouseKey, InputAction mouseAction);
+void (*userKeyboardCallback) (KeyboardKey keyboardKey, InputAction keyboardAction);
+
+
 // Error reporting ( ends program)
 void error(string msg)
 {
@@ -124,9 +130,15 @@ void errorCritical(char * msg)
 
 
 
-// Default keyboard callback
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+// Default keyboard callback , calling user callback
+void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+	KeyboardKey keyPressed = (KeyboardKey)key;
+	InputAction keyAction = (InputAction)action;
+
+	if (userKeyboardCallback != NULL)
+		userKeyboardCallback(keyPressed, keyAction);
+
     if (action == GLFW_PRESS && key == GLFW_KEY_ESCAPE)
     end();
 
@@ -134,8 +146,22 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 	end();
 }
 
+// Default mouse callback , calling user callback
+void mouseCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	double xpos, ypos;
+	glfwGetCursorPos(window, &xpos, &ypos);
+
+	MouseButton mouseButton = (MouseButton)button;
+	InputAction mouseAction = (InputAction)action;
+
+	if (userMouseCallback != NULL)
+		userMouseCallback((int)xpos,(int)ypos, mouseButton, mouseAction);
+
+}
+
 // Waiting state keyboard callback
-void waitingCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void waitingKeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (action == GLFW_PRESS)
     waiting = false;
@@ -143,7 +169,6 @@ void waitingCallback(GLFWwindow* window, int key, int scancode, int action, int 
 	if(glfwWindowShouldClose(window))
 	end();
 }
-
 
 
 // atexit function , it checks for realeasing resorces
@@ -157,7 +182,6 @@ void atEnd()
 void initGL(int w , int h)                                                      
 {
 	// First graphic window
-
 
 	glfwSetErrorCallback(error);                                                // Callback for GLFW errors
 
@@ -204,8 +228,8 @@ void initGL(int w , int h)
     glfwMakeContextCurrent(window);	                                            // Choosing active context
 
 
-	glfwSetKeyCallback(window,keyCallback);
-
+	glfwSetKeyCallback(window, keyboardCallback);								// Setting up input callbacks
+	glfwSetMouseButtonCallback(window, mouseCallback);
 
 	// Now OpenGL
 
@@ -315,12 +339,14 @@ void wait()
 {
 	waiting = true;
 
-	glfwSetKeyCallback(window, waitingCallback);
+	glfwSetKeyCallback(window, waitingKeyboardCallback);
 
 	while(waiting)
 	{
 	  glfwWaitEvents();
 	}
+
+	glfwSetKeyCallback(window, keyboardCallback);
 }
 
 // Set color used to clear the screen with clear()
@@ -397,6 +423,25 @@ void checkEvents()
 
 	if (glfwWindowShouldClose(window))
 		end();
+}
+
+// Setting Mouse Callback
+void setMouseCallback(void(*mouseCallback)(int x, int y, MouseButton button, InputAction action))
+{
+	userMouseCallback = mouseCallback;
+}
+
+// Setting Keyboard Callback
+void setKeyboardCallback(void(*keyboardCallback)(KeyboardKey key, InputAction action))
+{
+	userKeyboardCallback = keyboardCallback;
+}
+
+// Returns state of key
+InputAction getKeyState(KeyboardKey key)
+{
+	InputAction state = (InputAction)glfwGetKey(window, (int)key);
+	return state;
 }
 
 
@@ -534,15 +579,13 @@ void setGray(int value)
   glColor3ub(value,value,value);
 }
 
-// Swaping buffers , clearing screen and checking for events
+// Swaping buffers , clearing screen
 void swap()
 {
 	if(doublebuffered == false)
 	error("Cannot swap without double buffering");
 
 	glfwSwapBuffers(window);
-
-	checkEvents();
 
 	clear();
 }

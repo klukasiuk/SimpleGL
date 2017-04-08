@@ -29,6 +29,7 @@
 
 #pragma once
 
+#include "input.h"
 
 // Window maintence
 
@@ -75,6 +76,15 @@ double getTime();
 
 // Checking for events and inputs
 void checkEvents();
+
+// Setting Mouse Callback
+void setMouseCallback(void(*MouseCallback)(int x, int y, MouseButton button, InputAction action));
+
+// Setting Keyboard Callback
+void setKeyboardCallback(void(*KeyboardCallback)(KeyboardKey key, InputAction action));
+
+// Returns state of key
+InputAction getKeyState(KeyboardKey key);
 
 
 
