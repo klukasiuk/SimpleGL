@@ -1,16 +1,8 @@
 roadmap :
 
 - linux version
-- input( mouse and keybord )
 - 2D camera ( translation , rotation , zoom )
 - event driven programing
-- examples ( simple drawing , double buffered , event driven)
 - documentation
 - simple GUI ??
 - integration with my physics lib ???
-
-
-to do :
-
-- color struct
-- pre defined colors

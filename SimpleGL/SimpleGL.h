@@ -30,6 +30,7 @@
 #pragma once
 
 #include "input.h"
+#include "color.h"
 
 // Window maintence
 
@@ -53,6 +54,9 @@ void wait();
 
 // Set color used to clear the screen with clear()
 void setClearColor(double r , double g , double b);
+
+// Set color used to clear the screen with clear()
+void setClearColor(ColorRGB color);
 
 // Sets point size
 void setPointSize(float size);
@@ -134,6 +138,9 @@ void clear();
 // Sets RGB color ( 0 - 255 )
 void setColor(int r , int g , int b);
 
+// Sets RGB color
+void setColor(ColorRGB color);
+
 // Sets gray color ( 0 - 255 )
 void setGray(int value);
 
@@ -162,6 +169,9 @@ void drawImageCentered(int ID, float x, float y, float width, float height, int 
 
 // Changes all pixels with given color to transparent
 void keyColor(int ID , int r , int g , int b);
+
+// Changes all pixels with given color to transparent
+void keyColor(int ID, ColorRGB color);
 
 // Saving screeshot with given name in .bmp format
 void screenshot(char * filename);

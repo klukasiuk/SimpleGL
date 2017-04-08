@@ -355,6 +355,12 @@ void setClearColor(double r , double g , double b)
    glClearColor(r/255,g/255,b/255,0);
 }
 
+// Set color used to clear the screen with clear()
+void setClearColor(ColorRGB color)
+{
+	glClearColor((float)color.r / 255, (float)color.g / 255, (float)color.b / 255, 0);
+}
+
 // Sets point size
 void setPointSize(float size)
 {
@@ -573,6 +579,12 @@ void setColor(int r , int g , int b)
   glColor3ub(r,g,b);
 }
 
+// Sets RGB color
+void setColor(ColorRGB color)
+{
+	glColor3ub(color.r, color.g, color.b);
+}
+
 // Sets gray color ( 0 - 255 )
 void setGray(int value)
 {
@@ -780,6 +792,12 @@ void keyColor(int ID , int r , int g , int b)
   delete[] pixels;                                                                        // Deleting array
 
   glBindTexture( GL_TEXTURE_2D, NULL );                                                   // Unbinding texture
+}
+
+// Changes all pixels with given color to transparent
+void keyColor(int ID, ColorRGB color)
+{
+	keyColor(ID, color.r, color.g, color.b);
 }
 
 // Saving screeshot with given name in .bmp format
