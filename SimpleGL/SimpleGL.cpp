@@ -40,9 +40,12 @@ int window_height;                  // Window dimmensions
 int window_width;
 
 int fontSize = 12;                  // Default font size
-float layers = 3.0;                 // Amount of layers
+int layers = 3;						// Amount of layers
 
-float currentlayer = 1.0;           // Current layer     
+int currentlayer = 1;				// Current layer     
+
+float lastCameraPosX;				// Last camera position from view()
+float lastCameraPosY;
 
 vector<GLuint> IDs;                 // array with all images IDs
 
@@ -236,13 +239,7 @@ void initGL(int w , int h)
 
 	glViewport(0,0,w,h);						                                // Setting viewport
 
-	glMatrixMode(GL_PROJECTION);                                                // projection matrix is identity
-	glLoadIdentity();
-
-	glOrtho(0,w,0,h,1,-layers-1);                                               // Projection region
-
-	glMatrixMode(GL_MODELVIEW);                                                 // model matrix is identity
-	glLoadIdentity();	
+	view(0, w, h, 0);
 
 	glClearColor(0,0,0,0);                                            	        // default clear color
 
@@ -454,14 +451,31 @@ InputAction getKeyState(KeyboardKey key)
 // Sets view region to given coordinates
 void view(float left , float right , float top , float bottom)
 {
+	float posX = (right + left) / 2.0f;
+	float posY = (top + bottom) / 2.0f;
+
+	lastCameraPosX = posX;
+	lastCameraPosY = posY;
+
     glMatrixMode(GL_PROJECTION);                                                // projection matrix is identity
 	glLoadIdentity();
 
-	glOrtho(left,right,bottom,top,1,layers);                                    // Projection region
+	glOrtho(left, right, bottom, top, 1, -layers - 1);                          // Projection region
 
-	glMatrixMode(GL_MODELVIEW);                                                 // projection matrix is identity
+	glMatrixMode(GL_MODELVIEW);                                                 // model matrix is identity
 	glLoadIdentity();	
+}
 
+// Rotate view , angle in degrees
+void viewRotate(float angle)
+{
+	glMatrixMode(GL_PROJECTION);
+
+	glTranslatef(lastCameraPosX, lastCameraPosY, 0);
+	glRotatef(angle, 0, 0, 1);
+	glTranslatef(-lastCameraPosX, -lastCameraPosY, 0);
+
+	glMatrixMode(GL_MODELVIEW);
 }
 
 // Select current layer
@@ -646,10 +660,10 @@ void drawImage(int ID , float x , float y , float width , float height)
 
 	glBegin(GL_QUADS);                                      // Drawing
 
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(x + width, y);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(x + width, y + height);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y + height);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, currentlayer);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, currentlayer);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, currentlayer);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, currentlayer);
 
 	glEnd();
 
@@ -677,10 +691,10 @@ void drawImage(int ID, float x, float y, float width, float height, int rotation
 
 	glBegin(GL_QUADS);										// Drawing
 
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(x, y);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(x + width, y);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(x + width, y + height);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(x, y + height);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, currentlayer);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, currentlayer);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, currentlayer);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, currentlayer);
 
 	glEnd();
 
@@ -705,10 +719,10 @@ void drawImageCentered(int ID, float x, float y, float width, float height)
 
 	glBegin(GL_QUADS);                                       // Drawing
 
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(x - hw, y - hh);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(x + hw, y - hh);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(x + hw, y + hh);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(x - hw, y + hh);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x - hw, y - hh, currentlayer);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + hw, y - hh, currentlayer);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + hw, y + hh, currentlayer);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x - hw, y + hh, currentlayer);
 
 	glEnd();
 
@@ -739,10 +753,10 @@ void drawImageCentered(int ID, float x, float y, float width, float height, int 
 
 	glBegin(GL_QUADS);                                       // Drawing
 
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(x - hw, y - hh);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f(x + hw, y - hh);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f(x + hw, y + hh);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(x - hw, y + hh);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x - hw, y - hh, currentlayer);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + hw, y - hh, currentlayer);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + hw, y + hh, currentlayer);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x - hw, y + hh, currentlayer);
 
 	glEnd();
 

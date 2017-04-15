@@ -34,7 +34,13 @@
       <Filter>SimpleGL</Filter>
     </ClCompile>
     <ClCompile Include="color.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>SimpleGL</Filter>
+    </ClCompile>
+    <ClCompile Include="vec.cpp">
+      <Filter>SimpleGL</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>SimpleGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +63,12 @@
       <Filter>SimpleGL</Filter>
     </ClInclude>
     <ClInclude Include="color.h">
+      <Filter>SimpleGL</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>SimpleGL</Filter>
+    </ClInclude>
+    <ClInclude Include="vec.h">
       <Filter>SimpleGL</Filter>
     </ClInclude>
   </ItemGroup>

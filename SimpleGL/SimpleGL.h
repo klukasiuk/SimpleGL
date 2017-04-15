@@ -109,6 +109,9 @@ void errorCritical(char * msg);
 // Sets view region to given coordinates
 void view(float left , float top , float right , float bottom);
 
+// Rotate view , angle in degrees
+void viewRotate(float angle);
+
 // Select current layer
 void selectLayer(int layer);
 

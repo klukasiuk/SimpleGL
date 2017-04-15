@@ -88,19 +88,23 @@ xcopy /y /d  "$(SolutionDir)Images\*.*" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="color.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="msgbox.cpp" />
     <ClCompile Include="SimpleGL.cpp" />
+    <ClCompile Include="vec.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libs\FTGL\Include\FTGL\ftgl.h" />
     <ClInclude Include="..\Libs\GLFW\Include\glfw3.h" />
     <ClInclude Include="..\Libs\SOIL\include\SOIL.h" />
+    <ClInclude Include="camera.h" />
     <ClInclude Include="color.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="msgbox.h" />
     <ClInclude Include="SimpleGL.h" />
+    <ClInclude Include="vec.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,6 +8,10 @@ bool run;
 int mario_standing;
 int mario_jumping;
 
+// Ground images
+int ground;
+int ground2;
+
 // Variable for storing marios state
 int mario_pos;
 int mario_height;
@@ -46,12 +50,10 @@ void myKeyboardCallback(KeyboardKey key, InputAction action)
 void myMouseCallback(int x, int y, MouseButton button, InputAction action)
 {
 	if (button == Mouse_Left && action == Pressed)
-		if (mario_pos >= 140)
-			mario_pos -= 20;
+		viewRotate(10.0f);
 
 	if (button == Mouse_Right && action == Pressed)
-		if (mario_pos <= 500)
-			mario_pos += 20;
+		viewRotate(-10.0f);
 }
 
 // Initialization function
@@ -69,6 +71,10 @@ void init()
 	// Loading two images of mario(standing and jumping) , we must catch image ID to use it later
 	mario_standing = loadImage("mario.png");
 	mario_jumping = loadImage("mario1.png");
+
+	// Loading ground images
+	ground = loadImage("ground.png");
+	ground2 = loadImage("ground2.png");
 
 	// keyColor makes every pixel in image with given color completly transparent
 	keyColor(mario_standing, 0, 255, 255);
@@ -124,7 +130,7 @@ void update()
 	else
 	{
 		time = time - standing_time;
-		mario_height = 360 * sin(time*(3.14159/ (jump_period - standing_time)));
+		mario_height = 320 * sin(time*(3.14159/ (jump_period - standing_time)));
 		mario_rotation = mario_rotation_dir * 360.0 * time / (jump_period - standing_time);
 
 		// If mario is near ground height is clamped to zero to prevent jittering
@@ -151,11 +157,18 @@ void draw()
 {
 	// If mario is on ground draw standing mario image
 	if( mario_height == 0)
-	drawImageCentered(mario_standing, mario_pos, 32, 48, 64, mario_rotation);
+	drawImageCentered(mario_standing, mario_pos, 96, 48, 64, mario_rotation);
 
-	// If mario is in air draw jmping mario image with some rotation
+	// If mario is in air draw jumping mario image with some rotation
 	else
-	drawImageCentered(mario_jumping, mario_pos, mario_height + 32 , 64, 48, mario_rotation);
+	drawImageCentered(mario_jumping, mario_pos, mario_height + 96 , 64, 48, mario_rotation);
+
+	// Drawing ground under mario
+	for(int i=0;i<20;i++)
+	drawImage(ground, i * 32, 32, 32, 32);
+
+	for (int i = 0; i<20; i++)
+	drawImage(ground2, i * 32, 0, 32, 32);
 
 	// Swap buffers to show what was drawed
 	swap();
