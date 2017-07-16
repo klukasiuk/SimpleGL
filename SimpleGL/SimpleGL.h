@@ -138,8 +138,8 @@ void polygon( float * x , float * y , int n);
 // Drawing text in given place
 void text(float x , float y , char * t);
 
-// Drawing 2D rgb buffer ( x,y -> left down corner; width,height -> dimmensions; buff_w,buff_h -> buffer dimmensions)
-void rgb_buffer(float x, float y, float width, float height, int buff_w, int buff_h, int * buffer);
+// Drawing 2D rgb buffer ( x,y -> left down corner; width,height -> dimmensions; buff_w,buff_h -> buffer dimmensions; buffer must be unsigned byte)
+void rgb_buffer(float x, float y, float width, float height, int buff_w, int buff_h, void * buffer);
 
 // Clearing screen with ClearColor
 void clear();

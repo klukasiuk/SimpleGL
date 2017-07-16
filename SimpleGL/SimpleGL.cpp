@@ -594,8 +594,8 @@ void text(float x , float y , char * t)
   glFlush();
 }
 
-// Drawing 2D rgb buffer ( x,y -> left down corner; width,height -> dimmensions; buff_w,buff_h -> buffer dimmensions)
-void rgb_buffer(float x, float y, float width, float height, int buff_w, int buff_h, int * buffer)
+// Drawing 2D rgb buffer ( x,y -> left down corner; width,height -> dimmensions; buff_w,buff_h -> buffer dimmensions; buffer must be unsigned byte)
+void rgb_buffer(float x, float y, float width, float height, int buff_w, int buff_h, void * buffer)
 {
 	GLuint texture_id;
 
