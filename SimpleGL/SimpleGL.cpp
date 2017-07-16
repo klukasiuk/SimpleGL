@@ -21,7 +21,7 @@
 
 // Abstraction layer between os (windows.h) and this namespace
 // Msgbox is used in error handling
-#include "msgbox.h"
+#include "msgbox_SGL.h"
 
 
 // Loading names

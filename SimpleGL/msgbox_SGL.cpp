@@ -1,4 +1,4 @@
-#include "msgbox.h"
+#include "msgbox_SGL.h"
 
 #ifdef _WIN32 
 

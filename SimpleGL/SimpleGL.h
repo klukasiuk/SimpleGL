@@ -29,8 +29,8 @@
 
 #pragma once
 
-#include "input.h"
-#include "color.h"
+#include "input_SGL.h"
+#include "color_SGL.h"
 
 // Window maintence
 

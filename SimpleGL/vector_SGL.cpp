@@ -1,4 +1,4 @@
-#include "vec.h"
+#include "vector_SGL.h"
 
 #include <math.h>
 

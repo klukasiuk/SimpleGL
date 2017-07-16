@@ -1,4 +1,4 @@
-#include "color.h"
+#include "color_SGL.h"
 
 void clamp(int & val, int min, int max)
 {

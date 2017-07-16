@@ -1,4 +1,4 @@
-#include "camera.h"
+#include "camera_SGL.h"
 
 #include "SimpleGL.h"
 

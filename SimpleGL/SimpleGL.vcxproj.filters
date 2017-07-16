@@ -30,16 +30,16 @@
     <ClCompile Include="SimpleGL.cpp">
       <Filter>SimpleGL</Filter>
     </ClCompile>
-    <ClCompile Include="msgbox.cpp">
+    <ClCompile Include="camera_SGL.cpp">
       <Filter>SimpleGL</Filter>
     </ClCompile>
-    <ClCompile Include="color.cpp">
+    <ClCompile Include="color_SGL.cpp">
       <Filter>SimpleGL</Filter>
     </ClCompile>
-    <ClCompile Include="vec.cpp">
+    <ClCompile Include="msgbox_SGL.cpp">
       <Filter>SimpleGL</Filter>
     </ClCompile>
-    <ClCompile Include="camera.cpp">
+    <ClCompile Include="vector_SGL.cpp">
       <Filter>SimpleGL</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,19 +56,19 @@
     <ClInclude Include="..\Libs\SOIL\include\SOIL.h">
       <Filter>Libs\SOIL</Filter>
     </ClInclude>
-    <ClInclude Include="msgbox.h">
+    <ClInclude Include="camera_SGL.h">
       <Filter>SimpleGL</Filter>
     </ClInclude>
-    <ClInclude Include="input.h">
+    <ClInclude Include="color_SGL.h">
       <Filter>SimpleGL</Filter>
     </ClInclude>
-    <ClInclude Include="color.h">
+    <ClInclude Include="input_SGL.h">
       <Filter>SimpleGL</Filter>
     </ClInclude>
-    <ClInclude Include="camera.h">
+    <ClInclude Include="msgbox_SGL.h">
       <Filter>SimpleGL</Filter>
     </ClInclude>
-    <ClInclude Include="vec.h">
+    <ClInclude Include="vector_SGL.h">
       <Filter>SimpleGL</Filter>
     </ClInclude>
   </ItemGroup>
