@@ -27,7 +27,7 @@ const int standing_time = 1000;
 const int ground_clamping = 10;
 const int sleep_time = 16;
 
-
+// Function called every time key was pressed
 void myKeyboardCallback(KeyboardKey key, InputAction action)
 {
 	if (key == Key_Space && action == Pressed)
@@ -47,6 +47,7 @@ void myKeyboardCallback(KeyboardKey key, InputAction action)
 		mario_going_right = false;
 }
 
+// Function called every time mouse button was pressed
 void myMouseCallback(int x, int y, MouseButton button, InputAction action)
 {
 	if (button == Mouse_Left && action == Pressed)

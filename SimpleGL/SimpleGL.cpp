@@ -247,6 +247,8 @@ void initGL(int w , int h)
 
 	glEnable(GL_TEXTURE_2D);                                                    // texturing
 
+	glDisable(GL_LIGHTING);														// There's no need of lighting
+
     glEnable( GL_BLEND );	                                                	// blending
 
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );                        // blending func
@@ -447,6 +449,17 @@ InputAction getKeyState(KeyboardKey key)
 	return state;
 }
 
+// Returns by reference current position of coursor
+void getMousePosition(int & x, int & y)
+{
+	double xpos, ypos;
+
+	glfwGetCursorPos(window, &xpos, &ypos);
+
+	x = (int)xpos;
+	y = (int)ypos;
+}
+
 
 // Sets view region to given coordinates
 void view(float left , float right , float top , float bottom)
@@ -472,7 +485,7 @@ void viewRotate(float angle)
 	glMatrixMode(GL_PROJECTION);
 
 	glTranslatef(lastCameraPosX, lastCameraPosY, 0);
-	glRotatef(angle, 0, 0, 1);
+	glRotatef(-angle, 0, 0, 1);
 	glTranslatef(-lastCameraPosX, -lastCameraPosY, 0);
 
 	glMatrixMode(GL_MODELVIEW);
@@ -579,6 +592,41 @@ void text(float x , float y , char * t)
 
   if(doublebuffered == false)
   glFlush();
+}
+
+// Drawing 2D rgb buffer ( x,y -> left down corner; width,height -> dimmensions; buff_w,buff_h -> buffer dimmensions)
+void rgb_buffer(float x, float y, float width, float height, int buff_w, int buff_h, int * buffer)
+{
+	GLuint texture_id;
+
+	glGenTextures(1, &texture_id);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,buff_w,buff_h,0,GL_RGB,GL_UNSIGNED_BYTE,buffer);
+
+	glColor3f(1, 1, 1);
+
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(0, 0);
+	glVertex3f(x, y, currentlayer);
+
+	glTexCoord2f(1, 0);
+	glVertex3f(x + width, y, currentlayer);
+
+	glTexCoord2f(1, 1);
+	glVertex3f(x + width, y +  height, currentlayer);
+
+	glTexCoord2f(0, 1);
+	glVertex3f(x, y + height, currentlayer);
+
+	glEnd();
+
+	glDeleteTextures(1, &texture_id);
 }
 
 // Clearing screnn with ClearColor

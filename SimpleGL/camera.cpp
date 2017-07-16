@@ -66,7 +66,7 @@ void Camera2D::rotate(float angle)
 
 void Camera2D::zoom(float rate)
 {
-	if (fabsf(rate) < 0.01)
+	if (rate < 0.01f)
 		return;
 
 	width  =  width / rate;
