@@ -1,8 +1,11 @@
 roadmap :
 
 - linux version
-- 2D camera ( translation , rotation , zoom )
 - event driven programing
 - documentation
-- simple GUI ??
-- integration with my physics lib ???
+- audio (OpenAL?)
+- networking (Sockets)
+- serial port handling
+- tools for plots
+- simple GUI
+- integration with my physics lib
