@@ -50,3 +50,10 @@ struct Vec3D
 
 	void operator* (float s);
 };
+
+
+float dot(Vec2D a, Vec2D b);
+float dot(Vec3D a, Vec3D b);
+
+float cross(Vec2D a, Vec2D b);
+Vec3D cross(Vec3D a, Vec3D b);

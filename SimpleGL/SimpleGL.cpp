@@ -668,35 +668,41 @@ void swap()
 // Loading image from file and returning its ID
 int loadImage(char * path)
 {
-  int ID;
+	if (inited == false)
+	{
+		error("Loading images is not possible without lib initialization");
+		return - 1;
+	}
 
-  ID = SOIL_load_OGL_texture											 // Loading texture and saving ID
-  (
-  path,
-  SOIL_LOAD_RGBA ,
-  SOIL_CREATE_NEW_ID,
-  SOIL_FLAG_INVERT_Y
-  );
+	int ID;
 
-  if (ID == 0)
-  {
-	  error("Texture is not loaded");
-	  return 0;
-  }
+		ID = SOIL_load_OGL_texture											 // Loading texture and saving ID
+	(
+	path,
+	SOIL_LOAD_RGBA ,
+	SOIL_CREATE_NEW_ID,
+	SOIL_FLAG_INVERT_Y
+	);
 
-
-  glBindTexture(GL_TEXTURE_2D, ID);                                       // Texture filtering
-
-  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-
-  glBindTexture( GL_TEXTURE_2D, NULL ); 
+	if (ID == 0)
+	{
+		error("Texture is not loaded");
+		return 0;
+	}
 
 
+	glBindTexture(GL_TEXTURE_2D, ID);                                       // Texture filtering
 
-  IDs.push_back(ID);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 
-  return ID;
+	glBindTexture( GL_TEXTURE_2D, NULL ); 
+
+
+
+	IDs.push_back(ID);
+
+	return ID;
 }
 
 // Drawing image with given ID where x,y are coordinates of left bottom vertex

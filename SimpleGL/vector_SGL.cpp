@@ -139,3 +139,27 @@ void Vec3D::operator*(float s)
 	y *= s;
 	z *= s;
 }
+
+float dot(Vec2D a, Vec2D b)
+{
+	return a.x * b.x + a.y * b.y;
+}
+
+float dot(Vec3D a, Vec3D b)
+{
+	return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+float cross(Vec2D a, Vec2D b)
+{
+	return a.x * b.y - a.y * b.x;
+}
+
+Vec3D cross(Vec3D a, Vec3D b)
+{
+	float x = a.y * b.z - a.z * b.y;
+	float y = a.z * b.x - a.x * b.z;
+	float z = a.x * b.y - a.y * b.x;
+
+	return Vec3D(x, y, z);
+}
