@@ -17,7 +17,7 @@ Vec2D::Vec2D(float X, float Y)
 
 float Vec2D::getLength()
 {
-	return sqrt(x*x + y*y);
+	return sqrtf(x*x + y*y);
 }
 
 float Vec2D::getQuadLength()
@@ -85,7 +85,7 @@ Vec3D::Vec3D(float X, float Y, float Z)
 
 float Vec3D::getLength()
 {
-	return sqrt(x*x + y*y + z*z);
+	return sqrtf(x*x + y*y + z*z);
 }
 
 float Vec3D::getQuadLength()

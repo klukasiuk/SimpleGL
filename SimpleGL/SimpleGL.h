@@ -4,7 +4,7 @@
  * Based on : OpenGL , GLFW , SOIL and FTGL libraries
  *------------------------------------------------------------------------
  *
- * Copyright (c) 2015-2017 Konrad £ukasiuk
+ * Copyright (c) 2015-2018 Konrad £ukasiuk
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the author be held liable for any damages
@@ -99,10 +99,10 @@ void getMousePosition(int & x, int & y);
 
 
 // Throws out message box with given message
-void errorMsg(char * msg);
+void errorMsg(const char * msg);
 
 // Throws out message box with given message and ends program
-void errorCritical(char * msg);
+void errorCritical(const char * msg);
 
 
 
@@ -162,7 +162,7 @@ void swap();
 
 
 // Loading image from file and returning its ID
-int loadImage(char * path);
+int loadImage(const char * path);
 
 // Drawing image with given ID where x,y are coordinates of left bottom vertex
 void drawImage(int ID , float x, float y, float width, float height);

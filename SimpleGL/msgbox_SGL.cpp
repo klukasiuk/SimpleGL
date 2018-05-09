@@ -13,7 +13,7 @@
 
 #endif
 
-void MsgBox(const char * msg , char * tittle )
+void MsgBox(const char * msg , const char * tittle )
 {
   #ifdef _WIN32
 	MessageBoxA(NULL, msg, tittle, MB_ICONERROR | MB_OK );    // Na windowsie pobieram messageoxa z WinApi

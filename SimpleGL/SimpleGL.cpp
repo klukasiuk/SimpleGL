@@ -80,7 +80,7 @@ void error(string msg)
 }
 
 // Error reporting (ends program)
-void error(char * msg)
+void error(const char * msg)
 {
   MsgBox( msg, "LIBRARY ERROR :(" );
 
@@ -88,7 +88,7 @@ void error(char * msg)
 }
 
 // Error reporting ( ends program)
-void error(char * msg , string s)
+void error(const char * msg , string s)
 {
    string m = msg;
 
@@ -112,7 +112,7 @@ void error(int code, const char * msg)
 }
 
 // Throws msgbox with error
-void errorMsg(char * msg)
+void errorMsg(const char * msg)
 {
   MsgBox( msg, "USER DEFINED ERROR :(" );
 }
@@ -124,7 +124,7 @@ void errorMsg(string msg)
 }
 
 // Throws msgbox with error and ends program
-void errorCritical(char * msg)
+void errorCritical(const char * msg)
 {
   MsgBox( msg, "USER DEFINED ERROR :(" );
 
@@ -239,7 +239,7 @@ void initGL(int w , int h)
 
 	glViewport(0,0,w,h);						                                // Setting viewport
 
-	view(0, w, h, 0);
+	view(0, (float)w, (float)h, 0);
 
 	glClearColor(0,0,0,0);                                            	        // default clear color
 
@@ -263,7 +263,7 @@ void initGL(int w , int h)
 
 	glEnable ( GL_ALPHA_TEST ) ;                                                // Testing for alpha component(RGBA)
 
-	glAlphaFunc ( GL_GREATER, 0.1 ) ;                                           // Alpha func
+	glAlphaFunc ( GL_GREATER, (GLclampf)0.1 ) ;                                           // Alpha func
 
 	glPointSize(1);                                                           	// Default point size
 
@@ -316,7 +316,7 @@ void end()
 
    glfwTerminate();
 
-   for(int i=0;i<IDs.size();i++)
+   for(size_t i=0; i<IDs.size(); i++)
    glDeleteTextures( 1, &IDs[i] );
 
    IDs.clear();
@@ -351,7 +351,7 @@ void wait()
 // Set color used to clear the screen with clear()
 void setClearColor(double r , double g , double b)
 {
-   glClearColor(r/255,g/255,b/255,0);
+   glClearColor((GLclampf)(r/255), (GLclampf)(g/255), (GLclampf)(b/255), 0);
 }
 
 // Set color used to clear the screen with clear()
@@ -509,7 +509,7 @@ void point(float x , float y)
 {
 	glBegin(GL_POINTS);
 
-	glVertex3f(x,y,currentlayer);
+	glVertex3f(x,y, (GLfloat)currentlayer);
 
 	glEnd();
 
@@ -522,8 +522,8 @@ void line(float x1 , float y1 , float x2 , float y2)
 {
 	glBegin(GL_LINES);
 
-	glVertex3f(x1,y1,currentlayer);
-	glVertex3f(x2,y2,currentlayer);
+	glVertex3f(x1,y1, (GLfloat)currentlayer);
+	glVertex3f(x2,y2, (GLfloat)currentlayer);
 
 	glEnd();
 
@@ -536,7 +536,7 @@ void circle(float cx , float cy , float r)
 {
 	float vertNum = floor(10.0f * sqrtf(r));           // Counting vertices
 
-	float theta = 2 * PI / vertNum ;                   // Angle between vertices
+	float theta = (float)(2 * PI / vertNum );                   // Angle between vertices
 
 	float cosinus = cosf(theta);                       // Caching trig functions for theta
 	float sinus   = sinf(theta);
@@ -552,7 +552,7 @@ void circle(float cx , float cy , float r)
 
 	for(int i=0;i<vertNum;i++) 
 	{ 
-		glVertex3f(x + cx, y + cy,currentlayer);       // Send vertex to GPU
+		glVertex3f(x + cx, y + cy, (GLfloat)currentlayer);       // Send vertex to GPU
         
 
 		x2 = cosinus * x  -   sinus * y;               // Matrix rotation of radius vector to temp
@@ -613,16 +613,16 @@ void rgb_buffer(float x, float y, float width, float height, int buff_w, int buf
 	glBegin(GL_QUADS);
 
 	glTexCoord2f(0, 0);
-	glVertex3f(x, y, currentlayer);
+	glVertex3f(x, y, (GLfloat)currentlayer);
 
 	glTexCoord2f(1, 0);
-	glVertex3f(x + width, y, currentlayer);
+	glVertex3f(x + width, y, (GLfloat)currentlayer);
 
 	glTexCoord2f(1, 1);
-	glVertex3f(x + width, y +  height, currentlayer);
+	glVertex3f(x + width, y +  height, (GLfloat)currentlayer);
 
 	glTexCoord2f(0, 1);
-	glVertex3f(x, y + height, currentlayer);
+	glVertex3f(x, y + height, (GLfloat)currentlayer);
 
 	glEnd();
 
@@ -666,7 +666,7 @@ void swap()
 
 
 // Loading image from file and returning its ID
-int loadImage(char * path)
+int loadImage(const char * path)
 {
 	if (inited == false)
 	{
@@ -714,10 +714,10 @@ void drawImage(int ID , float x , float y , float width , float height)
 
 	glBegin(GL_QUADS);                                      // Drawing
 
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, currentlayer);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, currentlayer);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, currentlayer);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, currentlayer);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x,			y,			(GLfloat)currentlayer);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,			(GLfloat)currentlayer);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, (GLfloat)currentlayer);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x,			y + height, (GLfloat)currentlayer);
 
 	glEnd();
 
@@ -745,10 +745,10 @@ void drawImage(int ID, float x, float y, float width, float height, int rotation
 
 	glBegin(GL_QUADS);										// Drawing
 
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x, y, currentlayer);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y, currentlayer);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, currentlayer);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x, y + height, currentlayer);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x,			y,			(GLfloat)currentlayer);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + width, y,			(GLfloat)currentlayer);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + width, y + height, (GLfloat)currentlayer);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x,			y + height, (GLfloat)currentlayer);
 
 	glEnd();
 
@@ -773,10 +773,10 @@ void drawImageCentered(int ID, float x, float y, float width, float height)
 
 	glBegin(GL_QUADS);                                       // Drawing
 
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x - hw, y - hh, currentlayer);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + hw, y - hh, currentlayer);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + hw, y + hh, currentlayer);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x - hw, y + hh, currentlayer);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x - hw, y - hh, (GLfloat)currentlayer);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + hw, y - hh, (GLfloat)currentlayer);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + hw, y + hh, (GLfloat)currentlayer);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x - hw, y + hh, (GLfloat)currentlayer);
 
 	glEnd();
 
@@ -807,10 +807,10 @@ void drawImageCentered(int ID, float x, float y, float width, float height, int 
 
 	glBegin(GL_QUADS);                                       // Drawing
 
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(x - hw, y - hh, currentlayer);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + hw, y - hh, currentlayer);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + hw, y + hh, currentlayer);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(x - hw, y + hh, currentlayer);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(x - hw, y - hh, (GLfloat)currentlayer);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(x + hw, y - hh, (GLfloat)currentlayer);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(x + hw, y + hh, (GLfloat)currentlayer);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(x - hw, y + hh, (GLfloat)currentlayer);
 
 	glEnd();
 

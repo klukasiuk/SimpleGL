@@ -1,75 +1,50 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
+    <Filter Include="SimpleGL Headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="SimpleGL Source">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Libs">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="SimpleGL">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Libs\GLFW">
-      <UniqueIdentifier>{4aaeb86a-675c-4849-889c-5945cb808c2e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Libs\FTGL">
-      <UniqueIdentifier>{4d2140fa-9aab-404e-a514-f2cb942ad2f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Libs\SOIL">
-      <UniqueIdentifier>{0b029367-9219-4bd5-a342-2450a6768881}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SimpleGL.cpp">
-      <Filter>SimpleGL</Filter>
-    </ClCompile>
     <ClCompile Include="camera_SGL.cpp">
-      <Filter>SimpleGL</Filter>
+      <Filter>SimpleGL Source</Filter>
     </ClCompile>
     <ClCompile Include="color_SGL.cpp">
-      <Filter>SimpleGL</Filter>
+      <Filter>SimpleGL Source</Filter>
     </ClCompile>
     <ClCompile Include="msgbox_SGL.cpp">
-      <Filter>SimpleGL</Filter>
+      <Filter>SimpleGL Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleGL.cpp">
+      <Filter>SimpleGL Source</Filter>
     </ClCompile>
     <ClCompile Include="vector_SGL.cpp">
-      <Filter>SimpleGL</Filter>
+      <Filter>SimpleGL Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SimpleGL.h">
-      <Filter>SimpleGL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Libs\GLFW\Include\glfw3.h">
-      <Filter>Libs\GLFW</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Libs\FTGL\Include\FTGL\ftgl.h">
-      <Filter>Libs\FTGL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Libs\SOIL\include\SOIL.h">
-      <Filter>Libs\SOIL</Filter>
-    </ClInclude>
     <ClInclude Include="camera_SGL.h">
-      <Filter>SimpleGL</Filter>
-    </ClInclude>
-    <ClInclude Include="color_SGL.h">
-      <Filter>SimpleGL</Filter>
+      <Filter>SimpleGL Headers</Filter>
     </ClInclude>
     <ClInclude Include="input_SGL.h">
-      <Filter>SimpleGL</Filter>
+      <Filter>SimpleGL Headers</Filter>
     </ClInclude>
     <ClInclude Include="msgbox_SGL.h">
-      <Filter>SimpleGL</Filter>
+      <Filter>SimpleGL Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleGL.h">
+      <Filter>SimpleGL Headers</Filter>
     </ClInclude>
     <ClInclude Include="vector_SGL.h">
-      <Filter>SimpleGL</Filter>
+      <Filter>SimpleGL Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="color_SGL.h">
+      <Filter>SimpleGL Headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
