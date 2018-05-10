@@ -5,29 +5,29 @@
 
 Vec2D::Vec2D()
 {
-	x = 0.0f;
-	y = 0.0f;
+	x = 0.0;
+	y = 0.0;
 }
 
-Vec2D::Vec2D(float X, float Y)
+Vec2D::Vec2D(double X, double Y)
 {
 	x = X;
 	y = Y;
 }
 
-float Vec2D::getLength()
+double Vec2D::getLength()
 {
-	return sqrtf(x*x + y*y);
+	return sqrt(x*x + y*y);
 }
 
-float Vec2D::getQuadLength()
+double Vec2D::getQuadLength()
 {
 	return x*x + y*y;
 }
 
 void Vec2D::normalize()
 {
-	float length = this->getLength();
+	double length = this->getLength();
 
 	x = x / length;
 	y = y / length;
@@ -61,41 +61,53 @@ void Vec2D::operator-=(Vec2D v)
 	y -= v.y;
 }
 
-void Vec2D::operator*(float s)
+void Vec2D::operator*(double s)
 {
 	x *= s;
 	y *= s;
+}
+
+void Vec2D::rotate(double angle)
+{
+	double sin_angle = sin(angle);
+	double cos_angle = cos(angle);
+
+	double x2 = cos_angle * x - sin_angle * y;		// Thats two dimmension case of rotation matrix
+	double y2 = sin_angle * x + cos_angle * y;
+
+	x = x2;
+	y = y2;
 }
 
 
 
 Vec3D::Vec3D()
 {
-	x = 0.0f;
-	y = 0.0f;
-	z = 0.0f;
+	x = 0.0;
+	y = 0.0;
+	z = 0.0;
 }
 
-Vec3D::Vec3D(float X, float Y, float Z)
+Vec3D::Vec3D(double X, double Y, double Z)
 {
 	x = X;
 	y = Y;
 	z = Z;
 }
 
-float Vec3D::getLength()
+double Vec3D::getLength()
 {
-	return sqrtf(x*x + y*y + z*z);
+	return sqrt(x*x + y*y + z*z);
 }
 
-float Vec3D::getQuadLength()
+double Vec3D::getQuadLength()
 {
 	return x*x + y*y + z*z;
 }
 
 void Vec3D::normalize()
 {
-	float length = this->getLength();
+	double length = this->getLength();
 
 	x = x / length;
 	y = y / length;
@@ -133,33 +145,33 @@ void Vec3D::operator-=(Vec3D v)
 	z -= v.z;
 }
 
-void Vec3D::operator*(float s)
+void Vec3D::operator*(double s)
 {
 	x *= s;
 	y *= s;
 	z *= s;
 }
 
-float dot(Vec2D a, Vec2D b)
+double dot(Vec2D a, Vec2D b)
 {
 	return a.x * b.x + a.y * b.y;
 }
 
-float dot(Vec3D a, Vec3D b)
+double dot(Vec3D a, Vec3D b)
 {
 	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-float cross(Vec2D a, Vec2D b)
+double cross(Vec2D a, Vec2D b)
 {
 	return a.x * b.y - a.y * b.x;
 }
 
 Vec3D cross(Vec3D a, Vec3D b)
 {
-	float x = a.y * b.z - a.z * b.y;
-	float y = a.z * b.x - a.x * b.z;
-	float z = a.x * b.y - a.y * b.x;
+	double x = a.y * b.z - a.z * b.y;
+	double y = a.z * b.x - a.x * b.z;
+	double z = a.x * b.y - a.y * b.x;
 
 	return Vec3D(x, y, z);
 }

@@ -42,9 +42,9 @@ int ground;
 int ground2;
 
 // Variable for storing marios state
-int mario_pos;
-int mario_height;
-int mario_rotation;
+float mario_pos;
+float mario_height;
+float mario_rotation;
 int mario_rotation_dir;
 bool mario_going_left;
 bool mario_going_right;
@@ -93,7 +93,7 @@ void init()
 	setDoubleBuffered(true);
 
 	// Initialization of graphics window with desired size of window
-	initGL(640, 480);
+	initGL(640, 480, "SimpleGL - Mario Example");
 
 	// Setting color used when we clear window
 	setClearColor(80, 128, 255);
@@ -114,9 +114,9 @@ void init()
 	run = true;
 
 	// Setting mario_height and mario_rotation(degrees) to zero at start and other state variables
-	mario_height   = 0;
-	mario_rotation = 0;
-	mario_pos = 320;
+	mario_height   = 0.0f;
+	mario_rotation = 0.0f;
+	mario_pos = 320.0f;
 	mario_rotation_dir = 1;
 	mario_going_left = false;
 	mario_going_right = false;
@@ -160,8 +160,8 @@ void update()
 	else
 	{
 		time = time - standing_time;
-		mario_height = (int) (320 * sin(time*(3.14159/ (jump_period - standing_time))));
-		mario_rotation = (int) (mario_rotation_dir * 360.0 * time / (jump_period - standing_time));
+		mario_height = 320 * sinf(time*(3.14159/ (jump_period - standing_time)));
+		mario_rotation = mario_rotation_dir * 360.0f * time / (jump_period - standing_time);
 
 		// If mario is near ground height is clamped to zero to prevent jittering
 		if (mario_height < ground_clamping)		

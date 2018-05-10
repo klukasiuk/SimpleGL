@@ -36,6 +36,8 @@ using std::vector;
 GLFWwindow * window = NULL;         // Handle for window
 FTGLPixmapFont * font = NULL;       // Handle for font
 
+string window_name = "SimpleGL";
+
 int window_height;                  // Window dimmensions
 int window_width;
 
@@ -57,7 +59,7 @@ string fontName = "arial.ttf";      // Name of default font
 
 bool waiting = false;               // state of waitning for keyboard event
 
-bool inited = false;                // state of lib initialization
+bool initialized = false;                // state of lib initialization
 
 bool released = true;               // state of resorces realease
 
@@ -74,7 +76,7 @@ void (*userKeyboardCallback) (KeyboardKey keyboardKey, InputAction keyboardActio
 // Error reporting ( ends program)
 void error(string msg)
 {
-  MsgBox(msg.data(),"LIBRARY ERROR :(");
+  MsgBox(msg.data(),"LIBRARY ERROR");
 
   end();
 }
@@ -82,7 +84,7 @@ void error(string msg)
 // Error reporting (ends program)
 void error(const char * msg)
 {
-  MsgBox( msg, "LIBRARY ERROR :(" );
+  MsgBox( msg, "LIBRARY ERROR" );
 
   end();
 }
@@ -94,7 +96,7 @@ void error(const char * msg , string s)
 
    m += s;
 
-   MsgBox(m.data() , "LIBRARY ERROR :(");
+   MsgBox(m.data() , "LIBRARY ERROR");
 
    end();
 }
@@ -106,7 +108,7 @@ void error(int code, const char * msg)
 
    m += " code : " + to_string(code);
 
-   MsgBox(m.data() , "LIBRARY ERROR :(");
+   MsgBox(m.data() , "LIBRARY ERROR");
 
    end();
 }
@@ -114,19 +116,19 @@ void error(int code, const char * msg)
 // Throws msgbox with error
 void errorMsg(const char * msg)
 {
-  MsgBox( msg, "USER DEFINED ERROR :(" );
+  MsgBox( msg, "USER DEFINED ERROR" );
 }
 
 // Throws msgbox with error
 void errorMsg(string msg)
 {
-  MsgBox( msg.data(), "LIBRARY ERROR :(" );
+  MsgBox( msg.data(), "LIBRARY ERROR" );
 }
 
 // Throws msgbox with error and ends program
 void errorCritical(const char * msg)
 {
-  MsgBox( msg, "USER DEFINED ERROR :(" );
+  MsgBox( msg, "USER DEFINED ERROR" );
 
   exit(0);
 }
@@ -198,7 +200,7 @@ void initGL(int w , int h)
 	glfwWindowHint( GLFW_DOUBLEBUFFER,GL_FALSE );                               // Turning off doublebuffering
 
 
-    window = glfwCreateWindow( w , h , "SimpleGL", NULL , NULL );               // Creating window
+    window = glfwCreateWindow( w , h , window_name.c_str(), NULL , NULL );               // Creating window
 
 	
 	if(window == NULL)                                                          // Checking
@@ -221,7 +223,7 @@ void initGL(int w , int h)
 		}
 	}
 
-	inited = true;
+	initialized = true;
 
 
 	window_width = w;
@@ -274,7 +276,7 @@ void initGL(int w , int h)
 	font = new FTGLPixmapFont(fontName.data());                                 // loading deafault font
 
 	if(font->Error())                                                           // Checking
-    error("FTGL cannot load font",fontName);
+    error("FTGL cannot load font : ",fontName);
 
 	font->FaceSize(fontSize);													// Font size
 
@@ -299,6 +301,14 @@ void initGL(int w , int h)
 	clear();
 
 	atexit(atEnd);
+}
+
+// Initialization of graphic window with specified name
+void initGL(int w, int h, const char * window_tittle)
+{
+	window_name = string(window_tittle);
+	
+	initGL(w, h);
 }
 
 // Releasing resources
@@ -369,7 +379,7 @@ void setPointSize(float size)
 // Loading font from file
 void setFont(char * name)
 {
-  if(inited == false)															// If program wasnt initialized
+  if(initialized == false)															// If program wasnt initialized
   {
      fontName = name;															// Just change font name
 	 return;
@@ -408,7 +418,7 @@ void setFontSize(int size)
 // Setting double buffered mode(it needs to be set before initialization)
 void setDoubleBuffered(bool state)
 {
-	if(inited == false)
+	if(initialized == false)
 	doublebuffered = state;
 	else
 	error("Double buffering needs to be set before initialization");
@@ -668,7 +678,7 @@ void swap()
 // Loading image from file and returning its ID
 int loadImage(const char * path)
 {
-	if (inited == false)
+	if (initialized == false)
 	{
 		error("Loading images is not possible without lib initialization");
 		return - 1;
@@ -728,7 +738,7 @@ void drawImage(int ID , float x , float y , float width , float height)
 }
 
 // Drawing image with given ID where x,y are coordinates of left bottom vertex and rotation is in degrees
-void drawImage(int ID, float x, float y, float width, float height, int rotation)
+void drawImage(int ID, float x, float y, float width, float height, float rotation)
 {
 	glBindTexture(GL_TEXTURE_2D, ID);						// Wybieramy teksture 
 
@@ -739,7 +749,7 @@ void drawImage(int ID, float x, float y, float width, float height, int rotation
 		glPushMatrix();
 
 		glTranslatef(x + width/2, y + height/2, 0);
-		glRotatef((float)rotation, 0.0f, 0.0f, 1.0f);
+		glRotatef(rotation, 0.0f, 0.0f, 1.0f);
 		glTranslatef(-(x + width / 2), -(y + height / 2), 0);
 	}
 
@@ -787,7 +797,7 @@ void drawImageCentered(int ID, float x, float y, float width, float height)
 }
 
 // Drawing image with given ID where x,y are coordinates of center of image and rotation is in degrees
-void drawImageCentered(int ID, float x, float y, float width, float height, int rotation)
+void drawImageCentered(int ID, float x, float y, float width, float height, float rotation)
 {
 	glBindTexture(GL_TEXTURE_2D, ID);                        // Binding texture
 
@@ -801,7 +811,7 @@ void drawImageCentered(int ID, float x, float y, float width, float height, int 
 		glPushMatrix();
 
 		glTranslatef(x, y, 0);
-		glRotatef((float)rotation, 0.0f, 0.0f, 1.0f);
+		glRotatef(rotation, 0.0f, 0.0f, 1.0f);
 		glTranslatef(-x, -y, 0);
 	}
 
@@ -866,6 +876,25 @@ void keyColor(int ID , int r , int g , int b)
 void keyColor(int ID, ColorRGB color)
 {
 	keyColor(ID, color.r, color.g, color.b);
+}
+
+// Changes image mag and min filtering
+void setImageLinearFiltering(int ID, bool linearFiltering)
+{
+	glBindTexture(GL_TEXTURE_2D, ID);                                       // Texture filtering
+
+	if (linearFiltering)
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+	else
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	}
+
+	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
 // Saving screeshot with given name in .bmp format

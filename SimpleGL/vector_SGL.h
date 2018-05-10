@@ -2,14 +2,14 @@
 
 struct Vec2D
 {
-	float x;
-	float y;
+	double x;
+	double y;
 
 	Vec2D();
-	Vec2D(float X, float Y);
+	Vec2D(double X, double Y);
 
-	float getLength();
-	float getQuadLength();
+	double getLength();
+	double getQuadLength();
 
 	void normalize();
 
@@ -21,22 +21,24 @@ struct Vec2D
 	void operator+= (Vec2D v);
 	void operator-= (Vec2D v);
 
-	void operator* (float s);
+	void operator* (double s);
+
+	void rotate(double angle);	// angle in degrees !!!
 };
 
 
 
 struct Vec3D
 {
-	float x;
-	float y;
-	float z;
+	double x;
+	double y;
+	double z;
 
 	Vec3D();
-	Vec3D(float X, float Y, float Z);
+	Vec3D(double X, double Y, double Z);
 
-	float getLength();
-	float getQuadLength();
+	double getLength();
+	double getQuadLength();
 
 	void normalize();
 
@@ -48,12 +50,12 @@ struct Vec3D
 	void operator+= (Vec3D v);
 	void operator-= (Vec3D v);
 
-	void operator* (float s);
+	void operator* (double s);
 };
 
 
-float dot(Vec2D a, Vec2D b);
-float dot(Vec3D a, Vec3D b);
+double dot(Vec2D a, Vec2D b);
+double dot(Vec3D a, Vec3D b);
 
-float cross(Vec2D a, Vec2D b);
+double cross(Vec2D a, Vec2D b);
 Vec3D cross(Vec3D a, Vec3D b);

@@ -38,6 +38,9 @@
 // Initialization of graphic window
 void initGL(int w , int h);
 
+// Initialization of graphic window with specified name
+void initGL(int w, int h, const char * window_tittle);
+
 // Releasing resources
 void end();
 
@@ -168,19 +171,22 @@ int loadImage(const char * path);
 void drawImage(int ID , float x, float y, float width, float height);
 
 // Drawing image with given ID where x,y are coordinates of left bottom vertex and rotation is in degrees
-void drawImage(int ID, float x, float y, float width, float height, int rotation);
+void drawImage(int ID, float x, float y, float width, float height, float rotation);
 
 // Drawing image with given ID where x,y are coordinates of center of image
 void drawImageCentered(int ID, float x, float y, float width, float height);
 
 // Drawing image with given ID where x,y are coordinates of center of image and rotation is in degrees
-void drawImageCentered(int ID, float x, float y, float width, float height, int rotation);
+void drawImageCentered(int ID, float x, float y, float width, float height, float rotation);
 
 // Changes all pixels with given color to transparent
 void keyColor(int ID , int r , int g , int b);
 
 // Changes all pixels with given color to transparent
 void keyColor(int ID, ColorRGB color);
+
+// Changes image mag and min filtering
+void setImageLinearFiltering(int ID, bool linearFiltering);
 
 // Saving screeshot with given name in .bmp format
 void screenshot(char * filename);

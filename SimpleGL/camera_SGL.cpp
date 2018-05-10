@@ -30,10 +30,10 @@ void Camera2D::setView()
 	if (needUpdate == false)
 		return;
 
-	float left   = pos.x - width  / 2.0f;
-	float right  = pos.x + width  / 2.0f;
-	float top    = pos.y + height / 2.0f;
-	float bottom = pos.y - height / 2.0f;
+	float left   = (float) (pos.x - width  / 2.0f);
+	float right  = (float) (pos.x + width  / 2.0f);
+	float top    = (float) (pos.y + height / 2.0f);
+	float bottom = (float) (pos.y - height / 2.0f);
 
 	view(left, right, bottom, top);
 	viewRotate(rotation);
