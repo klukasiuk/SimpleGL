@@ -31,4 +31,8 @@ public:
 
 	void setRotation(float angle);								// Sets rotation to given value
 	void setSize(float Width, float Height);					// Sets camera size to given values
+
+	float get_rotation();
+	Vec2D get_position();
+	Vec2D get_viewsize();
 };

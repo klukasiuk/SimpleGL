@@ -1,5 +1,6 @@
 #include "vector_SGL.h"
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 
@@ -61,13 +62,43 @@ void Vec2D::operator-=(Vec2D v)
 	y -= v.y;
 }
 
-void Vec2D::operator*(double s)
+Vec2D Vec2D::operator*(int s)
+{
+	return Vec2D(x*s, y*s);
+}
+
+Vec2D Vec2D::operator*(double s)
+{
+	return Vec2D(x*s, y*s);
+}
+
+void Vec2D::operator*=(int s)
 {
 	x *= s;
 	y *= s;
 }
 
-void Vec2D::rotate(double angle)
+void Vec2D::operator*=(double s)
+{
+	x *= s;
+	y *= s;
+}
+
+void Vec2D::rotate_deg(double angle)
+{
+	angle = to_rad(angle);
+
+	double sin_angle = sin(angle);
+	double cos_angle = cos(angle);
+
+	double x2 = cos_angle * x - sin_angle * y;		// Thats two dimmension case of rotation matrix
+	double y2 = sin_angle * x + cos_angle * y;
+
+	x = x2;
+	y = y2;
+}
+
+void Vec2D::rotate_rad(double angle)
 {
 	double sin_angle = sin(angle);
 	double cos_angle = cos(angle);
@@ -145,11 +176,38 @@ void Vec3D::operator-=(Vec3D v)
 	z -= v.z;
 }
 
-void Vec3D::operator*(double s)
+Vec3D Vec3D::operator*(int s)
+{
+	return Vec3D(x*s, y*s, z*s);
+}
+
+Vec3D Vec3D::operator*(double s)
+{
+	return Vec3D(x*s, y*s, z*s);
+}
+
+void Vec3D::operator*=(int s)
 {
 	x *= s;
 	y *= s;
 	z *= s;
+}
+
+void Vec3D::operator*=(double s)
+{
+	x *= s;
+	y *= s;
+	z *= s;
+}
+
+double to_rad(double degrees)
+{
+	return degrees * (M_PI / 180.0);
+}
+
+double to_deg(double radians)
+{
+	return radians * (180.0 / M_PI);
 }
 
 double dot(Vec2D a, Vec2D b)

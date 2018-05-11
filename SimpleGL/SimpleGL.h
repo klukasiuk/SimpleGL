@@ -113,7 +113,7 @@ void errorCritical(const char * msg);
 
 
 // Sets view region to given coordinates
-void view(float left , float top , float right , float bottom);
+void view(float left, float right, float top, float bottom);
 
 // Rotate view , angle in degrees
 void viewRotate(float angle);
@@ -121,6 +121,11 @@ void viewRotate(float angle);
 // Select current layer
 void selectLayer(int layer);
 
+// Starts projection for Gui drawing
+void startGuiProjection();
+
+// Returns from Gui projection
+void endGuiProjection();
 
 
 // Drawing functions

@@ -195,12 +195,17 @@ void initGL(int w , int h)
 	if(result == GL_FALSE )                                                     // Checking
 	error("Cannot init GLFW");
 
+	// GLFW Window Hints
 
 	if(!doublebuffered)
 	glfwWindowHint( GLFW_DOUBLEBUFFER,GL_FALSE );                               // Turning off doublebuffering
 
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-    window = glfwCreateWindow( w , h , window_name.c_str(), NULL , NULL );               // Creating window
+	glfwWindowHint(GLFW_SAMPLES, 4);
+
+
+    window = glfwCreateWindow( w , h , window_name.c_str(), NULL , NULL );      // Creating window
 
 	
 	if(window == NULL)                                                          // Checking
@@ -265,7 +270,7 @@ void initGL(int w , int h)
 
 	glEnable ( GL_ALPHA_TEST ) ;                                                // Testing for alpha component(RGBA)
 
-	glAlphaFunc ( GL_GREATER, (GLclampf)0.1 ) ;                                           // Alpha func
+	glAlphaFunc ( GL_GREATER, (GLclampf)0.1 ) ;									// Alpha func
 
 	glPointSize(1);                                                           	// Default point size
 
@@ -314,26 +319,26 @@ void initGL(int w, int h, const char * window_tittle)
 // Releasing resources
 void end()
 {
-   if(font != NULL)
-   delete font;
+	for (size_t i = 0; i<IDs.size(); i++)
+		glDeleteTextures(1, &IDs[i]);
 
-   font = NULL;
+	IDs.clear();
 
-   if(window != NULL)
-   glfwDestroyWindow(window);
+	if(font != NULL)
+	delete font;
 
-   window = NULL;
+	font = NULL;
 
-   glfwTerminate();
+	if(window != NULL)
+	glfwDestroyWindow(window);
 
-   for(size_t i=0; i<IDs.size(); i++)
-   glDeleteTextures( 1, &IDs[i] );
+	window = NULL;
 
-   IDs.clear();
+	glfwTerminate();
 
-   released = true;
+	released = true;
 
-   exit(0);
+	exit(0);
 }
 
 // Sleeping thread ( time in miliseconds )
@@ -511,6 +516,30 @@ void selectLayer(int layer)
   }
 
  currentlayer = layer;
+}
+
+// Starts projection for Gui drawing
+void startGuiProjection()
+{
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glOrtho(0, window_width, 0, window_height, 1, -layers - 1);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+}
+
+// Returns from Gui projection
+void endGuiProjection()
+{
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 }
 
 
@@ -691,7 +720,7 @@ int loadImage(const char * path)
 	path,
 	SOIL_LOAD_RGBA ,
 	SOIL_CREATE_NEW_ID,
-	SOIL_FLAG_INVERT_Y
+	SOIL_FLAG_INVERT_Y|SOIL_FLAG_MIPMAPS
 	);
 
 	if (ID == 0)
@@ -700,14 +729,12 @@ int loadImage(const char * path)
 		return 0;
 	}
 
-
 	glBindTexture(GL_TEXTURE_2D, ID);                                       // Texture filtering
 
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 
 	glBindTexture( GL_TEXTURE_2D, NULL ); 
-
 
 
 	IDs.push_back(ID);
@@ -744,7 +771,7 @@ void drawImage(int ID, float x, float y, float width, float height, float rotati
 
 	glColor3f(1.0, 1.0, 1.0);								// Color modification ( 1.0 1.0 1.0 is texture color)
 
-	if (rotation != 0)										// Rotation matrix
+	if (fabs(rotation) > 0.001)										// Rotation matrix
 	{
 		glPushMatrix();
 
@@ -764,7 +791,7 @@ void drawImage(int ID, float x, float y, float width, float height, float rotati
 
 	glBindTexture(GL_TEXTURE_2D, NULL);
 
-	if (rotation != 0)
+	if (fabs(rotation) > 0.001)
 		glPopMatrix();
 
 	if (doublebuffered == false)
@@ -806,7 +833,7 @@ void drawImageCentered(int ID, float x, float y, float width, float height, floa
 	float hw = width / 2;
 	float hh = height / 2;
 
-	if (rotation != 0)                                        // Rotation matrix
+	if (fabs(rotation) > 0.001)                                        // Rotation matrix
 	{
 		glPushMatrix();
 
@@ -826,7 +853,7 @@ void drawImageCentered(int ID, float x, float y, float width, float height, floa
 
 	glBindTexture(GL_TEXTURE_2D, NULL);
 
-	if (rotation != 0)
+	if (fabs(rotation) > 0.001)
 	glPopMatrix();
 
 	if (doublebuffered == false)

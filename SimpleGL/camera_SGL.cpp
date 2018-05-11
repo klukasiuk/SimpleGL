@@ -35,7 +35,7 @@ void Camera2D::setView()
 	float top    = (float) (pos.y + height / 2.0f);
 	float bottom = (float) (pos.y - height / 2.0f);
 
-	view(left, right, bottom, top);
+	view(left, right, top, bottom);
 	viewRotate(rotation);
 
 
@@ -102,4 +102,19 @@ void Camera2D::setSize(float Width, float Height)
 	height = Height;
 
 	needUpdate = true;
+}
+
+float Camera2D::get_rotation()
+{
+	return rotation;
+}
+
+Vec2D Camera2D::get_position()
+{
+	return pos;
+}
+
+Vec2D Camera2D::get_viewsize()
+{
+	return Vec2D(width, height);
 }
