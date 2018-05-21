@@ -10,7 +10,6 @@
 #include <vector>                   // dynamic array -> vector
 #include <chrono>                   // function Sleep
 #include <thread>                   // function Sleep
-#include <string>                   // Very handy in working with text
 
 // Additional libs to OpenGL
 
@@ -26,7 +25,6 @@
 
 // Loading names
 
-using std::string;
 using std::to_string;
 using std::vector;
 
@@ -363,6 +361,19 @@ void wait()
 	glfwSetKeyCallback(window, keyboardCallback);
 }
 
+
+// Set window tittle
+void setWindowTittle(const char * tittle)
+{
+	glfwSetWindowTitle(window, tittle);
+}
+
+// Set window tittle
+void setWindowTittle(string tittle)
+{
+	setWindowTittle(tittle.c_str());
+}
+
 // Set color used to clear the screen with clear()
 void setClearColor(double r , double g , double b)
 {
@@ -621,6 +632,22 @@ void polygon( float * x , float * y , int n)
 
 	if(doublebuffered == false)
 	glFlush();
+}
+
+// Triangle strip ( array of x , array of y , number of vertices)
+void triangle_strip(float * x, float * y, int n)
+{
+	glBegin(GL_TRIANGLE_STRIP);
+
+	for (int i = 0; i<n; i++)
+	{
+		glVertex3d(x[i], y[i], currentlayer);
+	}
+
+	glEnd();
+
+	if (doublebuffered == false)
+		glFlush();
 }
 
 // Drawing text in given place

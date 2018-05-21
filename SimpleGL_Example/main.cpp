@@ -93,7 +93,10 @@ void init()
 	setDoubleBuffered(true);
 
 	// Initialization of graphics window with desired size of window
-	initGL(640, 480, "SimpleGL - Mario Example");
+	initGL(640, 480);
+
+	// Setting window tittle
+	setWindowTittle("SimpleGL - Mario Example");
 
 	// Setting color used when we clear window
 	setClearColor(80, 128, 255);

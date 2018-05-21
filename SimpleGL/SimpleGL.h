@@ -29,8 +29,18 @@
 
 #pragma once
 
+
+// std libraries
+#include <string>
+
+// SimpleGL libraries
 #include "input_SGL.h"
 #include "color_SGL.h"
+
+// Namespaces
+using std::string;
+
+
 
 // Window maintence
 
@@ -54,6 +64,11 @@ void wait();
 
 // Settings
 
+// Set window tittle
+void setWindowTittle(const char * tittle);
+
+// Set window tittle
+void setWindowTittle(string tittle);
 
 // Set color used to clear the screen with clear()
 void setClearColor(double r , double g , double b);
@@ -142,6 +157,9 @@ void circle(float x , float y , float r);
 
 // Polygon ( array of x , array of y , number of vertices)
 void polygon( float * x , float * y , int n);
+
+// Triangle strip ( array of x , array of y , number of vertices)
+void triangle_strip(float * x, float * y, int n);
 
 // Drawing text in given place
 void text(float x , float y , char * t);
