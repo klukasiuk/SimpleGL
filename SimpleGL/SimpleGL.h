@@ -164,6 +164,9 @@ void triangle_strip(float * x, float * y, int n);
 // Drawing text in given place
 void text(float x , float y , char * t);
 
+// Drawing text in given place
+void text(float x, float y, const char * t);
+
 // Drawing 2D rgb buffer ( x,y -> left down corner; width,height -> dimmensions; buff_w,buff_h -> buffer dimmensions; buffer must be unsigned byte)
 void rgb_buffer(float x, float y, float width, float height, int buff_w, int buff_h, void * buffer);
 

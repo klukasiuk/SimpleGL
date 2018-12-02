@@ -90,6 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Lib>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -97,8 +98,7 @@
     </Lib>
     <PostBuildEvent>
       <Command>xcopy /y /d  "$(ProjectDir)*.h" "$(TargetDir)include\"
-xcopy /y /d  "$(SolutionDir)Libs\dll\*.dll" "$(TargetDir)"
-xcopy /y /d  "$(SolutionDir)Fonts\*.ttf" "$(TargetDir)"</Command>
+xcopy /y /d  "$(SolutionDir)Libs\dll\*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -118,6 +118,7 @@ xcopy /y /d  "$(SolutionDir)Fonts\*.ttf" "$(TargetDir)"</Command>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -129,8 +130,7 @@ xcopy /y /d  "$(SolutionDir)Fonts\*.ttf" "$(TargetDir)"</Command>
     </Lib>
     <PostBuildEvent>
       <Command>xcopy /y /d  "$(ProjectDir)*.h" "$(TargetDir)include\"
-xcopy /y /d  "$(SolutionDir)Libs\dll\*.dll" "$(TargetDir)"
-xcopy /y /d  "$(SolutionDir)Fonts\*.ttf" "$(TargetDir)"</Command>
+xcopy /y /d  "$(SolutionDir)Libs\dll\*.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -161,6 +161,9 @@ xcopy /y /d  "$(SolutionDir)Fonts\*.ttf" "$(TargetDir)"</Command>
     <ClInclude Include="color_SGL.h" />
     <ClInclude Include="SimpleGL.h" />
     <ClInclude Include="vector_SGL.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\TODO.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

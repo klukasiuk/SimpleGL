@@ -88,6 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -95,7 +96,6 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d  "$(SolutionDir)Build\SimpleGL\*.dll" "$(TargetDir)"
-xcopy /y /d  "$(SolutionDir)Build\SimpleGL\*.ttf" "$(TargetDir)"
 xcopy /y /d  "$(SolutionDir)Images\*.*" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -116,6 +116,7 @@ xcopy /y /d  "$(SolutionDir)Images\*.*" "$(TargetDir)"</Command>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -127,8 +128,7 @@ xcopy /y /d  "$(SolutionDir)Images\*.*" "$(TargetDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d  "$(SolutionDir)Build\SimpleGL\*.dll" "$(TargetDir)"
-xcopy /y /d  "$(SolutionDir)Build\SimpleGL\*.ttf" "$(TargetDir)"
-xcopy /y /d  "$(SolutionDir)Images\*.*" "$(TargetDir)"</Command>
+xcopy /y /d  "$(SolutionDir)Images\*.*" "$(TargetDir)Assets\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

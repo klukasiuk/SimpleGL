@@ -49,7 +49,11 @@ float lastCameraPosY;
 
 vector<GLuint> IDs;                 // array with all images IDs
 
-string fontName = "arial.ttf";      // Name of default font
+#ifdef _WIN32
+
+string fontName = "C://Windows//Fonts//arial.ttf";      // Name of default font
+
+#endif 
 
 
 
@@ -658,6 +662,12 @@ void text(float x , float y , char * t)
 
   if(doublebuffered == false)
   glFlush();
+}
+
+// Drawing text in given place
+void text(float x, float y,const char * t)
+{
+	text(x, y, (char*)t);
 }
 
 // Drawing 2D rgb buffer ( x,y -> left down corner; width,height -> dimmensions; buff_w,buff_h -> buffer dimmensions; buffer must be unsigned byte)

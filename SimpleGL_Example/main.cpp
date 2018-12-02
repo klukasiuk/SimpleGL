@@ -102,12 +102,12 @@ void init()
 	setClearColor(80, 128, 255);
 
 	// Loading two images of mario(standing and jumping) , we must catch image ID to use it later
-	mario_standing = loadImage("mario.png");
-	mario_jumping = loadImage("mario1.png");
+	mario_standing = loadImage("Assets/mario.png");
+	mario_jumping = loadImage("Assets/mario1.png");
 
 	// Loading ground images
-	ground = loadImage("ground.png");
-	ground2 = loadImage("ground2.png");
+	ground = loadImage("Assets/ground.png");
+	ground2 = loadImage("Assets/ground2.png");
 
 	// keyColor makes every pixel in image with given color completly transparent
 	keyColor(mario_standing, 0, 255, 255);
@@ -202,6 +202,9 @@ void draw()
 
 	for (int i = 0; i<20; i++)
 	drawImage(ground2, i * 32, 0, 32, 32);
+
+	// Draw simple text
+	text(520, 440, "Jumping Mario :D");
 
 	// Swap buffers to show what was drawed
 	swap();
