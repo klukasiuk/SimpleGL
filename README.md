@@ -23,6 +23,29 @@ Based on : GLFW , FTGL , SOIL2
 - Mouse and Keyboard handling
 - Screenshots
 
+## Code example
+
+```c++
+#include "SimpleGL.h"     // Include basic SimpleGL functionality
+
+int main()
+{
+  initGL(800, 600);       // Create 800x600 pixels window
+  
+  while(true)
+  {
+    setColor(255,0,0);    // Set red color
+    circle(400,300,50);   // Draw circle in the middle of screen
+    
+    swap();               // Show circle on screen and clear buffer
+
+    checkEvents();        // Check for user input
+  }
+
+  return 0;
+}
+```
+
 ## Example application
 
 Example application involves jumping mario animation. Mario can be controlled with arrows, mouse buttons rotate camera.
